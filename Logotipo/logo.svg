@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Máscara: zona do pilar esquerdo do M onde o S passa por trás -->
+    <clipPath id="sBehindM">
+      <rect x="0" y="0" width="78" height="200"/>
+      <rect x="86" y="0" width="114" height="200"/>
+    </clipPath>
+    <!-- Máscara: zona completa (S passa à frente) -->
+    <clipPath id="mBehindS">
+      <rect x="0" y="0" width="200" height="91"/>
+      <rect x="0" y="115" width="200" height="200"/>
+    </clipPath>
+  </defs>
+
+  <!-- M por baixo (visível onde o S não passa à frente) -->
+  <path d="M 82,148 L 82,58 L 100,86 L 118,58 L 118,148"
+        fill="none" stroke="#7a7a7a" stroke-width="13"
+        stroke-linecap="round" stroke-linejoin="round"
+        clip-path="url(#mBehindS)"/>
+
+  <!-- S completo por cima -->
+  <path d="M 97,66 C 87,55 61,57 61,76 C 61,95 84,98 93,104 C 102,110 113,117 113,131 C 113,149 86,152 70,140"
+        fill="none" stroke="#7a7a7a" stroke-width="13"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- M visível no cruzamento central (pilar esquerdo por cima do S) -->
+  <path d="M 82,91 L 82,115"
+        fill="none" stroke="#7a7a7a" stroke-width="13"
+        stroke-linecap="round"/>
+
+  <!-- M pilar direito e topo (sempre visível) -->
+  <path d="M 82,58 L 100,86 L 118,58 L 118,148"
+        fill="none" stroke="#7a7a7a" stroke-width="13"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
