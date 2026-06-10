@@ -518,6 +518,11 @@
     // Init Lucide icons
     lucide.createIcons();
 
+    // --- Supabase ---
+    const SUPABASE_URL = 'https://asoacvciftbjzgqsqfja.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzb2FjdmNpZnRianpncXNxZmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzIyODEsImV4cCI6MjA5NjY0ODI4MX0.3KUBAqQut2j9HKXapWe8-F3XSe_8mw9POC2GMuMx3Tw';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     // --- Carregar conteúdo (Supabase com fallback para content.json) ---
     async function applyContent(c) {
       if (c.hero) {
@@ -595,11 +600,6 @@
     }, { threshold: 0.12 });
 
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-    // --- Supabase ---
-    const SUPABASE_URL = 'https://asoacvciftbjzgqsqfja.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzb2FjdmNpZnRianpncXNxZmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzIyODEsImV4cCI6MjA5NjY0ODI4MX0.3KUBAqQut2j9HKXapWe8-F3XSe_8mw9POC2GMuMx3Tw';
-    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // --- Contact form ---
     const form         = document.getElementById('contactForm');
