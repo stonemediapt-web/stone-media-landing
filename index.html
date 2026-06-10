@@ -518,38 +518,44 @@
     // Init Lucide icons
     lucide.createIcons();
 
-    // --- Carregar conteúdo do content.json ---
-    fetch('/content.json')
-      .then(r => r.json())
-      .then(c => {
-        // Hero
-        if (c.hero) {
-          document.getElementById('hero-title1').textContent    = c.hero.title1 || '';
-          document.getElementById('hero-title2').textContent    = c.hero.title2 || '';
-          document.getElementById('hero-title3').textContent    = c.hero.title3 || '';
-          document.getElementById('hero-subtitle').textContent  = c.hero.subtitle || '';
-          document.getElementById('hero-cta-primary').textContent  = c.hero.cta_primary || '';
-          document.getElementById('hero-cta-secondary').textContent = c.hero.cta_secondary || '';
+    // --- Carregar conteúdo (Supabase com fallback para content.json) ---
+    async function applyContent(c) {
+      if (c.hero) {
+        document.getElementById('hero-title1').textContent       = c.hero.title1        || '';
+        document.getElementById('hero-title2').textContent       = c.hero.title2        || '';
+        document.getElementById('hero-title3').textContent       = c.hero.title3        || '';
+        document.getElementById('hero-subtitle').textContent     = c.hero.subtitle      || '';
+        document.getElementById('hero-cta-primary').textContent  = c.hero.cta_primary   || '';
+        document.getElementById('hero-cta-secondary').textContent= c.hero.cta_secondary || '';
+      }
+      if (c.about) {
+        document.getElementById('about-title1').textContent = c.about.title1 || '';
+        document.getElementById('about-title2').textContent = c.about.title2 || '';
+        document.getElementById('about-text1').textContent  = c.about.text1  || '';
+        document.getElementById('about-text2').textContent  = c.about.text2  || '';
+      }
+      if (c.contact) {
+        document.getElementById('contact-title').textContent    = c.contact.title    || '';
+        document.getElementById('contact-subtitle').textContent = c.contact.subtitle || '';
+      }
+      if (c.footer) {
+        const cr = document.querySelector('footer p');
+        if (cr) cr.textContent = c.footer.copyright || '';
+      }
+    }
+
+    (async () => {
+      try {
+        const { data } = await db.from('site_content').select('content').eq('id', 1).single();
+        if (data?.content && Object.keys(data.content).length > 0) {
+          return applyContent(data.content);
         }
-        // Sobre
-        if (c.about) {
-          document.getElementById('about-title1').textContent = c.about.title1 || '';
-          document.getElementById('about-title2').textContent = c.about.title2 || '';
-          document.getElementById('about-text1').textContent  = c.about.text1  || '';
-          document.getElementById('about-text2').textContent  = c.about.text2  || '';
-        }
-        // Contacto
-        if (c.contact) {
-          document.getElementById('contact-title').textContent    = c.contact.title    || '';
-          document.getElementById('contact-subtitle').textContent = c.contact.subtitle || '';
-        }
-        // Footer copyright
-        if (c.footer) {
-          const cr = document.querySelector('footer p');
-          if (cr) cr.textContent = c.footer.copyright || '';
-        }
-      })
-      .catch(() => {}); // fallback: usa os textos hardcoded no HTML
+      } catch {}
+      try {
+        const r = await fetch('/content.json');
+        applyContent(await r.json());
+      } catch {}
+    })();
 
     // --- Mobile menu ---
     const menuBtn     = document.getElementById('menuBtn');

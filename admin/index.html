@@ -1,11 +1,433 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stone Media | Admin</title>
+  <title>Stone Media | Painel</title>
+
+  <link rel="icon" type="image/png" href="../Logotipo/StoneMedia_quadrado-Photoroom.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f4f4f4; color: #111; min-height: 100vh; }
+
+    /* ===== LOGIN ===== */
+    #login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .login-box {
+      background: #fff; border-radius: 16px; padding: 40px;
+      width: 100%; max-width: 380px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .login-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+    .login-brand img { height: 32px; filter: brightness(0); }
+    .login-brand span { font-size: 17px; font-weight: 700; }
+    .login-brand span em { font-style: normal; font-weight: 300; color: #aaa; }
+    .login-box h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .login-box p { font-size: 13px; color: #888; margin-bottom: 28px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 11px; font-weight: 600; color: #555; margin-bottom: 6px; }
+    .field input {
+      width: 100%; border: 1px solid #e5e5e5; border-radius: 8px;
+      padding: 11px 14px; font-size: 13px; font-family: 'Inter', sans-serif;
+      color: #111; background: #fafafa; transition: border 0.2s;
+    }
+    .field input:focus { outline: none; border-color: #aaa; background: #fff; }
+    .btn-primary {
+      width: 100%; background: #111; color: #fff; border: none; border-radius: 10px;
+      padding: 13px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: background 0.2s; margin-top: 4px;
+    }
+    .btn-primary:hover { background: #333; }
+    .btn-primary:disabled { background: #ccc; cursor: default; }
+    #login-error {
+      background: #fff0f0; border: 1px solid #ffd0d0; border-radius: 8px;
+      padding: 10px 14px; font-size: 12px; color: #c00; margin-top: 14px; display: none;
+    }
+
+    /* ===== EDITOR ===== */
+    #editor-screen { display: none; }
+
+    .topbar {
+      background: #111; color: #fff; padding: 0 28px;
+      height: 56px; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; }
+    .topbar-brand img { height: 26px; filter: brightness(0) invert(1); }
+    .topbar-brand span { font-size: 15px; font-weight: 600; }
+    .topbar-brand span em { font-style: normal; font-weight: 300; color: rgba(255,255,255,0.4); }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-user { font-size: 12px; color: rgba(255,255,255,0.5); }
+    .btn-logout {
+      background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; padding: 6px 14px; font-size: 12px; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.2); }
+
+    .editor-body { max-width: 760px; margin: 0 auto; padding: 32px 20px 60px; }
+
+    .editor-header { margin-bottom: 28px; }
+    .editor-header h1 { font-size: 22px; font-weight: 700; }
+    .editor-header p { font-size: 13px; color: #888; margin-top: 4px; }
+
+    .card {
+      background: #fff; border-radius: 12px; padding: 24px;
+      margin-bottom: 16px; border: 1px solid #efefef;
+    }
+    .card-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: #aaa; margin-bottom: 18px;
+      padding-bottom: 12px; border-bottom: 1px solid #f4f4f4;
+    }
+
+    .field-row { margin-bottom: 14px; }
+    .field-row label { display: block; font-size: 11px; font-weight: 600; color: #555; margin-bottom: 5px; }
+    .field-row input, .field-row textarea {
+      width: 100%; border: 1px solid #e5e5e5; border-radius: 8px;
+      padding: 9px 12px; font-size: 13px; font-family: 'Inter', sans-serif;
+      color: #111; background: #fafafa; transition: border 0.2s;
+    }
+    .field-row input:focus, .field-row textarea:focus {
+      outline: none; border-color: #aaa; background: #fff;
+    }
+    .field-row textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* Services */
+    .service-item {
+      border: 1px solid #f0f0f0; border-radius: 8px; padding: 16px; margin-bottom: 10px;
+    }
+    .service-item-header {
+      font-size: 11px; font-weight: 600; color: #aaa; margin-bottom: 10px;
+    }
+
+    /* Save bar */
+    .save-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid #efefef;
+      padding: 14px 28px; display: flex; align-items: center; justify-content: flex-end; gap: 14px;
+      display: none;
+    }
+    #save-status { font-size: 13px; color: #888; }
+    #save-status.success { color: #059669; font-weight: 600; }
+    #save-status.error { color: #c00; font-weight: 600; }
+    .btn-save {
+      background: #111; color: #fff; border: none; border-radius: 8px;
+      padding: 10px 24px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-save:hover { background: #333; }
+    .btn-save:disabled { background: #ccc; cursor: default; }
+  </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-brand">
+      <img src="../Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" />
+      <span>Stone<em>Media</em></span>
+    </div>
+    <h2>Bem-vindo</h2>
+    <p>Inicia sessão para gerir o conteúdo do site.</p>
+    <form id="login-form">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="email@exemplo.com" required />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" required />
+      </div>
+      <button type="submit" class="btn-primary" id="login-btn">Entrar</button>
+      <div id="login-error"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== EDITOR ===== -->
+<div id="editor-screen">
+
+  <div class="topbar">
+    <div class="topbar-brand">
+      <img src="../Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" />
+      <span>Stone<em>Media</em> <span style="color:rgba(255,255,255,0.3); font-weight:300; font-size:13px;">Painel</span></span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-user" id="user-email"></span>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </div>
+
+  <div class="editor-body">
+    <div class="editor-header">
+      <h1>Editar Conteúdo</h1>
+      <p>Todas as alterações ficam guardadas e publicadas automaticamente no site.</p>
+    </div>
+
+    <!-- Hero -->
+    <div class="card">
+      <p class="card-title">Hero — Cabeçalho Principal</p>
+      <div class="field-row">
+        <label>Linha 1</label>
+        <input type="text" id="hero-title1" />
+      </div>
+      <div class="field-row">
+        <label>Linha destaque (itálico)</label>
+        <input type="text" id="hero-title2" />
+      </div>
+      <div class="field-row">
+        <label>Linha 3</label>
+        <input type="text" id="hero-title3" />
+      </div>
+      <div class="field-row">
+        <label>Subtítulo</label>
+        <textarea id="hero-subtitle"></textarea>
+      </div>
+      <div class="grid2">
+        <div class="field-row">
+          <label>Botão principal</label>
+          <input type="text" id="hero-cta-primary" />
+        </div>
+        <div class="field-row">
+          <label>Botão secundário</label>
+          <input type="text" id="hero-cta-secondary" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Sobre -->
+    <div class="card">
+      <p class="card-title">Sobre</p>
+      <div class="grid2">
+        <div class="field-row">
+          <label>Título linha 1</label>
+          <input type="text" id="about-title1" />
+        </div>
+        <div class="field-row">
+          <label>Título linha 2 (itálico)</label>
+          <input type="text" id="about-title2" />
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Parágrafo 1</label>
+        <textarea id="about-text1"></textarea>
+      </div>
+      <div class="field-row">
+        <label>Parágrafo 2</label>
+        <textarea id="about-text2"></textarea>
+      </div>
+    </div>
+
+    <!-- Serviços -->
+    <div class="card">
+      <p class="card-title">Serviços</p>
+      <div id="services-editor"></div>
+    </div>
+
+    <!-- Contacto -->
+    <div class="card">
+      <p class="card-title">Secção de Contacto</p>
+      <div class="field-row">
+        <label>Título</label>
+        <input type="text" id="contact-title" />
+      </div>
+      <div class="field-row">
+        <label>Subtítulo</label>
+        <textarea id="contact-subtitle"></textarea>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="card">
+      <p class="card-title">Rodapé</p>
+      <div class="field-row">
+        <label>Copyright</label>
+        <input type="text" id="footer-copyright" />
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Save bar -->
+  <div class="save-bar" id="save-bar" style="display:flex;">
+    <span id="save-status"></span>
+    <button class="btn-save" id="save-btn" onclick="saveContent()">Guardar alterações</button>
+  </div>
+
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://asoacvciftbjzgqsqfja.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzb2FjdmNpZnRianpncXNxZmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzIyODEsImV4cCI6MjA5NjY0ODI4MX0.3KUBAqQut2j9HKXapWe8-F3XSe_8mw9POC2GMuMx3Tw';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let currentServices = [];
+
+  // ===== AUTH =====
+  db.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      document.getElementById('login-screen').style.display  = 'none';
+      document.getElementById('editor-screen').style.display = 'block';
+      document.getElementById('user-email').textContent = session.user.email;
+      loadContent();
+    } else {
+      document.getElementById('login-screen').style.display  = 'flex';
+      document.getElementById('editor-screen').style.display = 'none';
+    }
+  });
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const err = document.getElementById('login-error');
+    btn.disabled = true;
+    btn.textContent = 'A entrar...';
+    err.style.display = 'none';
+
+    const { error } = await db.auth.signInWithPassword({
+      email:    document.getElementById('login-email').value,
+      password: document.getElementById('login-password').value,
+    });
+
+    if (error) {
+      err.textContent = 'Email ou password incorretos.';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Entrar';
+    }
+  });
+
+  async function logout() {
+    await db.auth.signOut();
+  }
+
+  // ===== LOAD CONTENT =====
+  async function loadContent() {
+    // Try Supabase first
+    const { data } = await db.from('site_content').select('content').eq('id', 1).single();
+    let c = data?.content && Object.keys(data.content).length > 0
+      ? data.content
+      : null;
+
+    // Fall back to content.json
+    if (!c) {
+      try {
+        const r = await fetch('/content.json');
+        c = await r.json();
+      } catch {}
+    }
+
+    if (!c) return;
+
+    // Populate fields
+    if (c.hero) {
+      document.getElementById('hero-title1').value        = c.hero.title1       || '';
+      document.getElementById('hero-title2').value        = c.hero.title2       || '';
+      document.getElementById('hero-title3').value        = c.hero.title3       || '';
+      document.getElementById('hero-subtitle').value      = c.hero.subtitle     || '';
+      document.getElementById('hero-cta-primary').value   = c.hero.cta_primary  || '';
+      document.getElementById('hero-cta-secondary').value = c.hero.cta_secondary|| '';
+    }
+    if (c.about) {
+      document.getElementById('about-title1').value = c.about.title1 || '';
+      document.getElementById('about-title2').value = c.about.title2 || '';
+      document.getElementById('about-text1').value  = c.about.text1  || '';
+      document.getElementById('about-text2').value  = c.about.text2  || '';
+    }
+    if (c.contact) {
+      document.getElementById('contact-title').value    = c.contact.title    || '';
+      document.getElementById('contact-subtitle').value = c.contact.subtitle || '';
+    }
+    if (c.footer) {
+      document.getElementById('footer-copyright').value = c.footer.copyright || '';
+    }
+
+    // Services
+    currentServices = c.services ? JSON.parse(JSON.stringify(c.services)) : [];
+    renderServices();
+  }
+
+  function renderServices() {
+    const container = document.getElementById('services-editor');
+    container.innerHTML = currentServices.map((s, i) => `
+      <div class="service-item">
+        <p class="service-item-header">Serviço ${i + 1}</p>
+        <div class="field-row">
+          <label>Título</label>
+          <input type="text" value="${escHtml(s.title)}"
+            oninput="currentServices[${i}].title = this.value" />
+        </div>
+        <div class="field-row">
+          <label>Descrição</label>
+          <textarea oninput="currentServices[${i}].description = this.value">${escHtml(s.description)}</textarea>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function escHtml(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ===== SAVE CONTENT =====
+  async function saveContent() {
+    const btn    = document.getElementById('save-btn');
+    const status = document.getElementById('save-status');
+    btn.disabled = true;
+    btn.textContent = 'A guardar...';
+    status.textContent = '';
+    status.className = '';
+
+    const content = {
+      hero: {
+        title1:        document.getElementById('hero-title1').value,
+        title2:        document.getElementById('hero-title2').value,
+        title3:        document.getElementById('hero-title3').value,
+        subtitle:      document.getElementById('hero-subtitle').value,
+        cta_primary:   document.getElementById('hero-cta-primary').value,
+        cta_secondary: document.getElementById('hero-cta-secondary').value,
+      },
+      about: {
+        title1: document.getElementById('about-title1').value,
+        title2: document.getElementById('about-title2').value,
+        text1:  document.getElementById('about-text1').value,
+        text2:  document.getElementById('about-text2').value,
+      },
+      services: currentServices,
+      contact: {
+        title:    document.getElementById('contact-title').value,
+        subtitle: document.getElementById('contact-subtitle').value,
+      },
+      footer: {
+        copyright: document.getElementById('footer-copyright').value,
+      },
+    };
+
+    const { error } = await db.from('site_content')
+      .upsert({ id: 1, content, updated_at: new Date().toISOString() });
+
+    btn.disabled = false;
+    btn.textContent = 'Guardar alterações';
+
+    if (error) {
+      status.textContent = 'Erro ao guardar. Tenta novamente.';
+      status.className = 'error';
+    } else {
+      status.textContent = 'Guardado com sucesso!';
+      status.className = 'success';
+      setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
+    }
+  }
+</script>
+
 </body>
 </html>
