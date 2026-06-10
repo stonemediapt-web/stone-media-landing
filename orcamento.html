@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stone Media — Gerador de Orçamentos</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body { font-family: 'Inter', sans-serif; background: #f4f4f4; color: #111; }
+
+    /* ===== FORM PANEL ===== */
+    #app { display: flex; min-height: 100vh; }
+
+    #form-panel {
+      width: 380px; min-width: 380px; background: #fff;
+      border-right: 1px solid #e5e5e5;
+      padding: 24px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    #form-panel h1 { font-size: 16px; font-weight: 700; color: #111; }
+    #form-panel h1 span { color: #aaa; font-weight: 300; }
+
+    .form-section { display: flex; flex-direction: column; gap: 10px; }
+    .form-section-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: #aaa; padding-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    label { font-size: 11px; font-weight: 600; color: #555; display: block; margin-bottom: 4px; }
+
+    input, textarea, select {
+      width: 100%; border: 1px solid #e5e5e5; border-radius: 8px;
+      padding: 9px 12px; font-size: 12px; font-family: 'Inter', sans-serif;
+      color: #111; background: #fafafa; transition: border 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: #aaa; background: #fff;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* Services table in form */
+    #services-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .service-row {
+      background: #fafafa; border: 1px solid #efefef;
+      border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;
+      position: relative;
+    }
+
+    .service-row .row2 { grid-template-columns: 2fr 1fr; }
+
+    .remove-btn {
+      position: absolute; top: 8px; right: 8px;
+      background: none; border: none; cursor: pointer;
+      color: #ccc; font-size: 16px; line-height: 1;
+    }
+    .remove-btn:hover { color: #999; }
+
+    #add-service {
+      background: none; border: 1px dashed #ddd; border-radius: 8px;
+      padding: 9px; font-size: 11px; color: #aaa; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.2s;
+    }
+    #add-service:hover { border-color: #aaa; color: #666; background: #fafafa; }
+
+    .btn-generate {
+      background: #111; color: #fff; border: none; border-radius: 10px;
+      padding: 13px; font-size: 13px; font-weight: 600;
+      font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-generate:hover { background: #333; }
+
+    /* ===== PREVIEW ===== */
+    #preview-panel {
+      flex: 1; padding: 32px; overflow-y: auto;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+
+    #preview-panel h2 { font-size: 11px; color: #aaa; font-weight: 500; }
+
+    /* ===== QUOTE PAGE ===== */
+    .quote-page {
+      width: 210mm; background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border-radius: 4px; overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .quote-header {
+      background: #111; color: #fff;
+      padding: 10mm 12mm 8mm;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .quote-brand { display: flex; align-items: center; gap: 10px; }
+    .quote-logo { height: 36px; filter: brightness(0) invert(1); }
+    .quote-brand-name { font-size: 16px; font-weight: 600; color: #fff; }
+    .quote-brand-name span { color: rgba(255,255,255,0.4); font-weight: 300; }
+    .quote-header-right { text-align: right; }
+    .quote-header-right p { font-size: 10px; color: rgba(255,255,255,0.5); line-height: 1.8; }
+    .quote-header-right strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+
+    .quote-body { padding: 8mm 12mm; }
+
+    .quote-meta {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6mm; margin-bottom: 8mm;
+      padding-bottom: 6mm; border-bottom: 1px solid #f0f0f0;
+    }
+    .quote-meta-block p { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #aaa; margin-bottom: 3px; }
+    .quote-meta-block h3 { font-size: 13px; font-weight: 600; color: #111; }
+    .quote-meta-block span { font-size: 11px; color: #666; }
+
+    .quote-section-title {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: #aaa; margin-bottom: 4mm;
+    }
+
+    .quote-table { width: 100%; border-collapse: collapse; margin-bottom: 6mm; }
+    .quote-table th {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #aaa; text-align: left;
+      padding: 0 3mm 3mm; border-bottom: 1px solid #f0f0f0;
+    }
+    .quote-table th:last-child { text-align: right; }
+    .quote-table td {
+      padding: 3.5mm 3mm; font-size: 11px; color: #444;
+      border-bottom: 1px solid #f8f8f8; vertical-align: top;
+    }
+    .quote-table td:first-child { font-weight: 600; color: #111; width: 35%; }
+    .quote-table td:last-child { text-align: right; font-weight: 600; color: #111; white-space: nowrap; }
+
+    .quote-total-row { background: #FAFAFA; }
+    .quote-total-row td { padding: 4mm 3mm; }
+    .quote-total-row td:first-child { font-size: 12px; font-weight: 700; color: #111; }
+    .quote-total-row td:last-child { font-size: 14px; font-weight: 700; color: #111; }
+
+    .quote-conditions {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 4mm; margin-bottom: 6mm;
+    }
+    .quote-condition { background: #FAFAFA; border-radius: 6px; padding: 4mm; }
+    .quote-condition p { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 2mm; }
+    .quote-condition span { font-size: 11px; font-weight: 600; color: #111; }
+
+    .quote-notes { background: #FAFAFA; border-radius: 6px; padding: 4mm 5mm; margin-bottom: 6mm; }
+    .quote-notes p { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 2mm; }
+    .quote-notes span { font-size: 11px; color: #666; line-height: 1.6; }
+
+    .quote-footer {
+      border-top: 1px solid #f0f0f0; padding: 5mm 12mm;
+      display: flex; justify-content: space-between; align-items: center;
+      background: #fff;
+    }
+    .quote-footer p { font-size: 9px; color: #ccc; }
+    .quote-footer-contact { text-align: right; }
+    .quote-footer-contact p { font-size: 9px; color: #aaa; line-height: 1.7; }
+
+    /* ===== PRINT ===== */
+    @media print {
+      #form-panel, #preview-panel h2 { display: none !important; }
+      #app { display: block; }
+      #preview-panel { padding: 0; }
+      .quote-page { box-shadow: none; border-radius: 0; width: 100%; }
+      body { background: #fff; }
+    }
+    @page { size: A4; margin: 0; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===== PAINEL DO FORMULÁRIO ===== -->
+  <div id="form-panel">
+    <h1>Stone<span>Media</span> — Orçamentos</h1>
+
+    <!-- Cliente -->
+    <div class="form-section">
+      <p class="form-section-title">Cliente</p>
+      <div>
+        <label>Nome do cliente</label>
+        <input type="text" id="f-client-name" placeholder="Ex: João Silva" oninput="update()" />
+      </div>
+      <div>
+        <label>Empresa</label>
+        <input type="text" id="f-client-company" placeholder="Ex: Silva & Associados" oninput="update()" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" id="f-client-email" placeholder="email@empresa.com" oninput="update()" />
+      </div>
+      <div class="row2">
+        <div>
+          <label>Telemóvel</label>
+          <input type="text" id="f-client-phone" placeholder="Ex: +351 912 345 678" oninput="update()" />
+        </div>
+        <div>
+          <label>NIF</label>
+          <input type="text" id="f-client-nif" placeholder="Ex: 123456789" oninput="update()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Orçamento -->
+    <div class="form-section">
+      <p class="form-section-title">Orçamento</p>
+      <div class="row2">
+        <div>
+          <label>Nº do orçamento</label>
+          <input type="text" id="f-ref" placeholder="Ex: ORC-001" oninput="update()" />
+        </div>
+        <div>
+          <label>Data</label>
+          <input type="date" id="f-date" oninput="update()" />
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label>Prazo de entrega</label>
+          <input type="text" id="f-deadline" placeholder="Ex: 15 dias úteis" oninput="update()" />
+        </div>
+        <div>
+          <label>Validade</label>
+          <input type="text" id="f-validity" placeholder="Ex: 30 dias" oninput="update()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Serviços -->
+    <div class="form-section">
+      <p class="form-section-title">Serviços</p>
+      <div id="services-list"></div>
+      <button id="add-service" onclick="addService()">+ Adicionar serviço</button>
+    </div>
+
+    <!-- Condições -->
+    <div class="form-section">
+      <p class="form-section-title">Condições de Pagamento</p>
+      <div>
+        <label>Condições</label>
+        <input type="text" id="f-payment" placeholder="Ex: 50% início · 50% entrega" oninput="update()" />
+      </div>
+      <div>
+        <label>Notas adicionais</label>
+        <textarea id="f-notes" placeholder="Ex: Valores sem IVA. Manutenção não incluída..." oninput="update()"></textarea>
+      </div>
+    </div>
+
+    <button class="btn-generate" onclick="window.print()">Exportar PDF</button>
+  </div>
+
+  <!-- ===== PREVIEW ===== -->
+  <div id="preview-panel">
+    <h2>Pré-visualização</h2>
+
+    <div class="quote-page" id="quote">
+
+      <!-- Header -->
+      <div class="quote-header">
+        <div class="quote-brand">
+          <img src="Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" class="quote-logo" />
+          <span class="quote-brand-name">Stone<span>Media</span></span>
+        </div>
+        <div class="quote-header-right">
+          <p>Proposta Comercial</p>
+          <p><strong id="q-ref">ORC-001</strong></p>
+          <p id="q-date">—</p>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="quote-body">
+
+        <!-- Meta -->
+        <div class="quote-meta" style="grid-template-columns: 1fr;">
+          <div class="quote-meta-block">
+            <p>Proposta para</p>
+            <h3 id="q-client-name">Nome do Cliente</h3>
+            <span id="q-client-company" style="display:block;"></span>
+            <span id="q-client-email" style="display:block;"></span>
+            <span id="q-client-phone" style="display:block;"></span>
+            <span id="q-client-nif" style="display:block;"></span>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <p class="quote-section-title">Serviços Incluídos</p>
+        <table class="quote-table">
+          <thead>
+            <tr>
+              <th>Serviço</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody id="q-services-body">
+            <tr><td colspan="3" style="color:#ccc; font-size:11px; padding: 4mm 3mm;">Adiciona serviços no formulário...</td></tr>
+          </tbody>
+          <tfoot>
+            <tr class="quote-total-row">
+              <td colspan="2">Total <span style="font-size:9px; font-weight:400; color:#aaa;">(IVA incluído)</span></td>
+              <td id="q-total">0,00 €</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Conditions -->
+        <p class="quote-section-title">Condições</p>
+        <div class="quote-conditions">
+          <div class="quote-condition">
+            <p>Prazo de Entrega</p>
+            <span id="q-deadline">—</span>
+          </div>
+          <div class="quote-condition">
+            <p>Pagamento</p>
+            <span id="q-payment">—</span>
+          </div>
+          <div class="quote-condition">
+            <p>Validade da Proposta</p>
+            <span id="q-validity">—</span>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="quote-notes" id="q-notes-block">
+          <p>Notas</p>
+          <span id="q-notes">—</span>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="quote-footer">
+        <p>Stone Media · stonemedia.pt</p>
+        <div class="quote-footer-contact">
+          <p>stonemediapt@gmail.com</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let services = [];
+
+  // Set today's date
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+
+  function addService() {
+    const id = Date.now();
+    services.push({ id, name: '', desc: '', value: '' });
+    renderServiceForm();
+    update();
+  }
+
+  function removeService(id) {
+    services = services.filter(s => s.id !== id);
+    renderServiceForm();
+    update();
+  }
+
+  function renderServiceForm() {
+    const list = document.getElementById('services-list');
+    list.innerHTML = services.map(s => `
+      <div class="service-row">
+        <button class="remove-btn" onclick="removeService(${s.id})">×</button>
+        <div>
+          <label>Nome do serviço</label>
+          <input type="text" placeholder="Ex: Site Institucional" value="${s.name}"
+            oninput="updateService(${s.id}, 'name', this.value)" />
+        </div>
+        <div>
+          <label>Descrição</label>
+          <input type="text" placeholder="Ex: Design + desenvolvimento + SEO básico" value="${s.desc}"
+            oninput="updateService(${s.id}, 'desc', this.value)" />
+        </div>
+        <div class="row2">
+          <div>
+            <label>Valor (€)</label>
+            <input type="number" placeholder="0" value="${s.value}"
+              oninput="updateService(${s.id}, 'value', this.value)" />
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function updateService(id, field, value) {
+    const s = services.find(s => s.id === id);
+    if (s) s[field] = value;
+    update();
+  }
+
+  function fmt(n) {
+    return parseFloat(n || 0).toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  function fmtDate(d) {
+    if (!d) return '—';
+    const [y, m, day] = d.split('-');
+    return `${day}/${m}/${y}`;
+  }
+
+  function update() {
+    // Header
+    document.getElementById('q-ref').textContent   = document.getElementById('f-ref').value   || 'ORC-001';
+    document.getElementById('q-date').textContent  = fmtDate(document.getElementById('f-date').value);
+
+    // Client
+    document.getElementById('q-client-name').textContent    = document.getElementById('f-client-name').value    || 'Nome do Cliente';
+    document.getElementById('q-client-company').textContent = document.getElementById('f-client-company').value || '';
+    document.getElementById('q-client-email').textContent   = document.getElementById('f-client-email').value   || '';
+    const phone = document.getElementById('f-client-phone').value;
+    const nif   = document.getElementById('f-client-nif').value;
+    document.getElementById('q-client-phone').textContent = phone ? phone : '';
+    document.getElementById('q-client-nif').textContent   = nif   ? 'NIF: ' + nif : '';
+
+    // Services table
+    const tbody = document.getElementById('q-services-body');
+    if (services.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="color:#ccc; font-size:11px; padding: 4mm 3mm;">Adiciona serviços no formulário...</td></tr>';
+    } else {
+      tbody.innerHTML = services.map(s => `
+        <tr>
+          <td>${s.name || '—'}</td>
+          <td>${s.desc || '—'}</td>
+          <td>${fmt(s.value)}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Total
+    const total = services.reduce((sum, s) => sum + parseFloat(s.value || 0), 0);
+    document.getElementById('q-total').textContent = fmt(total);
+
+    // Conditions
+    document.getElementById('q-deadline').textContent = document.getElementById('f-deadline').value || '—';
+    document.getElementById('q-payment').textContent  = document.getElementById('f-payment').value  || '—';
+    document.getElementById('q-validity').textContent = document.getElementById('f-validity').value || '—';
+
+    // Notes
+    const notes = document.getElementById('f-notes').value;
+    document.getElementById('q-notes').textContent = notes || '—';
+  }
+
+  // Init with one service row
+  addService();
+</script>
+
+</body>
+</html>

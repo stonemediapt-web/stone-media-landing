@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stone Media — Apresentação</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e5e5e5;
+      color: #111;
+    }
+
+    /* ---- PAGE ---- */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      background: #fff;
+      margin: 20px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- COVER ---- */
+    .cover {
+      background: #111;
+      color: #fff;
+      justify-content: space-between;
+      padding: 18mm 16mm;
+    }
+
+    .cover-top { display: flex; align-items: center; gap: 12px; }
+    .cover-logo { height: 48px; filter: brightness(0) invert(1); }
+    .cover-brand { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; color: #fff; }
+    .cover-brand span { color: rgba(255,255,255,0.4); font-weight: 300; }
+
+    .cover-center { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 20mm 0 10mm; }
+    .cover-tag { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+    .cover-title { font-family: 'Playfair Display', serif; font-size: 48px; line-height: 1.1; font-weight: 500; margin-bottom: 20px; }
+    .cover-title em { color: rgba(255,255,255,0.45); font-style: italic; }
+    .cover-subtitle { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 120mm; font-weight: 300; }
+
+    .cover-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10mm; }
+    .cover-bottom p { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+    /* ---- INNER PAGES ---- */
+    .inner { padding: 14mm 16mm; justify-content: flex-start; }
+
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #f0f0f0; padding-bottom: 6mm; margin-bottom: 10mm;
+    }
+    .page-header-brand { display: flex; align-items: center; gap: 8px; }
+    .page-header-logo { height: 24px; filter: brightness(0); }
+    .page-header-name { font-size: 12px; font-weight: 600; color: #111; }
+    .page-header-name span { color: #aaa; font-weight: 300; }
+    .page-num { font-size: 10px; color: #ccc; font-weight: 400; }
+
+    .section-tag { font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #aaa; margin-bottom: 6mm; }
+
+    .section-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 500; line-height: 1.15; color: #111; margin-bottom: 6mm; }
+    .section-title em { color: #aaa; font-style: italic; }
+
+    .section-text { font-size: 11px; color: #666; line-height: 1.8; margin-bottom: 4mm; font-weight: 400; }
+    .section-text strong { color: #111; font-weight: 600; }
+
+    /* ---- SERVICES GRID ---- */
+    .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin-top: 2mm; }
+
+    .service-card {
+      background: #FAFAFA;
+      border: 1px solid #f0f0f0;
+      border-radius: 8px;
+      padding: 6mm 7mm;
+    }
+    .service-icon {
+      width: 28px; height: 28px; background: #eee;
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 4mm;
+    }
+    .service-icon svg { width: 14px; height: 14px; stroke: #555; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .service-title { font-size: 11px; font-weight: 700; color: #111; margin-bottom: 2mm; }
+    .service-desc { font-size: 10px; color: #888; line-height: 1.6; }
+
+    /* ---- PROCESS ---- */
+    .process-steps { display: flex; flex-direction: column; gap: 0; margin-top: 4mm; }
+
+    .process-step {
+      display: flex; gap: 8mm; align-items: flex-start;
+      padding: 6mm 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .process-step:last-child { border-bottom: none; }
+
+    .step-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 400;
+      color: #e8e8e8; line-height: 1;
+      min-width: 14mm;
+    }
+    .step-content { flex: 1; padding-top: 2px; }
+    .step-title { font-size: 12px; font-weight: 700; color: #111; margin-bottom: 2mm; }
+    .step-text { font-size: 10px; color: #888; line-height: 1.65; }
+
+    /* ---- VALUE PROPS ---- */
+    .value-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5mm; margin-top: 4mm; }
+    .value-card { text-align: center; padding: 7mm 5mm; background: #FAFAFA; border-radius: 8px; border: 1px solid #f0f0f0; }
+    .value-number { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 500; color: #111; margin-bottom: 2mm; }
+    .value-label { font-size: 9px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    .value-desc { font-size: 10px; color: #888; line-height: 1.5; margin-top: 3mm; }
+
+    /* ---- CTA PAGE ---- */
+    .cta-page {
+      background: #F5F0EA;
+      justify-content: space-between;
+      padding: 18mm 16mm;
+    }
+    .cta-center { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .cta-tag { font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #aaa; margin-bottom: 6mm; }
+    .cta-title { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 500; line-height: 1.15; color: #111; margin-bottom: 6mm; }
+    .cta-title em { color: #bbb; font-style: italic; }
+    .cta-text { font-size: 12px; color: #666; line-height: 1.7; max-width: 120mm; margin-bottom: 10mm; }
+    .cta-contact { display: flex; flex-direction: column; gap: 3mm; }
+    .cta-contact-item { display: flex; align-items: center; gap: 3mm; font-size: 11px; color: #444; }
+    .cta-contact-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #aaa; min-width: 20mm; }
+    .cta-bottom { border-top: 1px solid rgba(0,0,0,0.08); padding-top: 8mm; display: flex; justify-content: space-between; align-items: center; }
+    .cta-bottom-brand { display: flex; align-items: center; gap: 8px; }
+    .cta-bottom-logo { height: 24px; filter: brightness(0); }
+    .cta-bottom-name { font-size: 13px; font-weight: 600; color: #111; }
+    .cta-bottom-name span { color: #aaa; font-weight: 300; }
+    .cta-bottom-copy { font-size: 9px; color: #bbb; }
+
+    /* ---- PRINT ---- */
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; page-break-after: always; page-break-inside: avoid; }
+      .page:last-child { page-break-after: avoid; }
+    }
+
+    @page { size: A4; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== PÁGINA 1: CAPA ===== -->
+  <div class="page cover">
+    <div class="cover-top">
+      <img src="Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" class="cover-logo" />
+      <span class="cover-brand">Stone<span>Media</span></span>
+    </div>
+
+    <div class="cover-center">
+      <p class="cover-tag">Apresentação de Serviços</p>
+      <h1 class="cover-title">
+        A sua marca<br />
+        <em>merece uma</em><br />
+        estratégia real.
+      </h1>
+      <p class="cover-subtitle">
+        Somos uma agência de estratégia e desenvolvimento digital focada em construir ecossistemas que atraem, convertem e fidelizam clientes — independentemente do ponto de partida.
+      </p>
+    </div>
+
+    <div class="cover-bottom">
+      <p>stonemedia.pt &nbsp;·&nbsp; stonemediapt@gmail.com &nbsp;·&nbsp; 2026</p>
+    </div>
+  </div>
+
+
+  <!-- ===== PÁGINA 2: SOBRE ===== -->
+  <div class="page inner">
+    <div class="page-header">
+      <div class="page-header-brand">
+        <img src="Logotipo/StoneMedia_quadrado-Photoroom.png" alt="" class="page-header-logo" />
+        <span class="page-header-name">Stone<span>Media</span></span>
+      </div>
+      <span class="page-num">01 / 04</span>
+    </div>
+
+    <p class="section-tag">Quem Somos</p>
+    <h2 class="section-title">
+      Uma visão holística<br />
+      <em>para o crescimento digital.</em>
+    </h2>
+
+    <p class="section-text">
+      O crescimento digital não acontece por acaso. É o resultado de uma <strong>estratégia coerente</strong>, bem executada em cada ponto de contacto com o cliente.
+    </p>
+    <p class="section-text">
+      Na Stone Media, ligamos os pontos entre presença, autoridade, captação e retenção — com experiência transversal em estratégia, conteúdo e tecnologia.
+    </p>
+    <p class="section-text" style="margin-top: 2mm;">
+      Não somos uma agência generalista. Trabalhamos com foco, com metodologia e com um único objetivo: <strong>fazer crescer o seu negócio de forma consistente e sustentável</strong>.
+    </p>
+
+    <!-- Value cards -->
+    <div class="value-grid" style="margin-top: 10mm;">
+      <div class="value-card">
+        <p class="value-number">100%</p>
+        <p class="value-label">Foco em resultados</p>
+        <p class="value-desc">Cada decisão é tomada com base nos objetivos do cliente.</p>
+      </div>
+      <div class="value-card">
+        <p class="value-number">360°</p>
+        <p class="value-label">Abordagem holística</p>
+        <p class="value-desc">Estratégia, design e tecnologia a trabalhar em conjunto.</p>
+      </div>
+      <div class="value-card">
+        <p class="value-number">∞</p>
+        <p class="value-label">Crescimento sustentável</p>
+        <p class="value-desc">Soluções pensadas para durar e escalar com o negócio.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== PÁGINA 3: SERVIÇOS ===== -->
+  <div class="page inner">
+    <div class="page-header">
+      <div class="page-header-brand">
+        <img src="Logotipo/StoneMedia_quadrado-Photoroom.png" alt="" class="page-header-logo" />
+        <span class="page-header-name">Stone<span>Media</span></span>
+      </div>
+      <span class="page-num">02 / 04</span>
+    </div>
+
+    <p class="section-tag">O Que Fazemos</p>
+    <h2 class="section-title">
+      Serviços desenhados<br />
+      <em>para potenciar o seu negócio.</em>
+    </h2>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <p class="service-title">Sites Institucionais</p>
+        <p class="service-desc">Presença online profissional, rápida e bem estruturada. Ideal para transmitir credibilidade e ser encontrado no Google.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <p class="service-title">Landing Pages de Alta Conversão</p>
+        <p class="service-desc">Páginas focadas num único objetivo, otimizadas para campanhas pagas e orgânicas com estrutura, copy e design alinhados.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <p class="service-title">Gestão de Redes Sociais</p>
+        <p class="service-desc">Planeamento estratégico, criação de conteúdo e crescimento orgânico de comunidade alinhado com a identidade da marca.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <p class="service-title">Email Marketing & Automação</p>
+        <p class="service-desc">Campanhas segmentadas e fluxos automáticos para nutrir leads, recuperar vendas e aumentar o lifetime value.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <p class="service-title">Ímanes de Leads</p>
+        <p class="service-desc">Estruturação e design de materiais ricos como e-books, checklists e templates para captar contactos qualificados.</p>
+      </div>
+
+      <div class="service-card" style="background: #111; border-color: #111;">
+        <p class="service-title" style="color: #fff; margin-top: 2mm;">Não sabe por onde começar?</p>
+        <p class="service-desc" style="color: rgba(255,255,255,0.5); margin-top: 3mm;">Fazemos um diagnóstico gratuito da sua presença digital e recomendamos os serviços mais adequados ao seu momento.</p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ===== PÁGINA 4: PROCESSO ===== -->
+  <div class="page inner">
+    <div class="page-header">
+      <div class="page-header-brand">
+        <img src="Logotipo/StoneMedia_quadrado-Photoroom.png" alt="" class="page-header-logo" />
+        <span class="page-header-name">Stone<span>Media</span></span>
+      </div>
+      <span class="page-num">03 / 04</span>
+    </div>
+
+    <p class="section-tag">Como Trabalhamos</p>
+    <h2 class="section-title">
+      Um processo claro,<br />
+      <em>sem surpresas.</em>
+    </h2>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <span class="step-number">01</span>
+        <div class="step-content">
+          <p class="step-title">Reunião de Diagnóstico</p>
+          <p class="step-text">Começamos por ouvir. Numa conversa de 30 minutos percebemos os seus objetivos, o estado atual da sua presença digital e os principais desafios. Sem compromisso, sem custos.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <span class="step-number">02</span>
+        <div class="step-content">
+          <p class="step-title">Proposta Personalizada</p>
+          <p class="step-text">Com base no diagnóstico, elaboramos uma proposta à medida — com os serviços recomendados, prazos e condições claras. Sem pacotes genéricos.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <span class="step-number">03</span>
+        <div class="step-content">
+          <p class="step-title">Execução & Acompanhamento</p>
+          <p class="step-text">Mãos à obra. Trabalhamos com transparência total — partilhamos progressos, pedimos feedback e ajustamos sempre que necessário. Nunca desaparece um fornecedor.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <span class="step-number">04</span>
+        <div class="step-content">
+          <p class="step-title">Entrega & Resultados</p>
+          <p class="step-text">Entregamos dentro do prazo combinado, com toda a documentação e formação necessária. Medimos resultados e reportamos com clareza o que foi alcançado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== PÁGINA 5: CTA ===== -->
+  <div class="page cta-page">
+    <div class="page-header" style="border-bottom-color: rgba(0,0,0,0.08);">
+      <div class="page-header-brand">
+        <img src="Logotipo/StoneMedia_quadrado-Photoroom.png" alt="" class="page-header-logo" />
+        <span class="page-header-name">Stone<span>Media</span></span>
+      </div>
+      <span class="page-num" style="color: #bbb;">04 / 04</span>
+    </div>
+
+    <div class="cta-center">
+      <p class="cta-tag">Próximos Passos</p>
+      <h2 class="cta-title">
+        Pronto para o<br />
+        <em>próximo nível?</em>
+      </h2>
+      <p class="cta-text">
+        Agende uma reunião gratuita de 30 minutos. Analisamos a sua situação, apresentamos as melhores soluções e respondemos a todas as suas dúvidas — sem compromissos.
+      </p>
+
+      <div class="cta-contact">
+        <div class="cta-contact-item">
+          <span class="cta-contact-label">Website</span>
+          <a href="https://stonemedia.pt" target="_blank" style="color:#444; text-decoration:none; border-bottom: 1px solid #ccc;">stonemedia.pt</a>
+        </div>
+        <div class="cta-contact-item">
+          <span class="cta-contact-label">Email</span>
+          <a href="mailto:stonemediapt@gmail.com" style="color:#444; text-decoration:none; border-bottom: 1px solid #ccc;">stonemediapt@gmail.com</a>
+        </div>
+        <div class="cta-contact-item">
+          <span class="cta-contact-label">Reunião</span>
+          <a href="https://calendly.com/stonemediapt/30min" target="_blank" style="color:#444; text-decoration:none; border-bottom: 1px solid #ccc;">calendly.com/stonemediapt/30min</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-bottom">
+      <div class="cta-bottom-brand">
+        <img src="Logotipo/StoneMedia_quadrado-Photoroom.png" alt="" class="cta-bottom-logo" />
+        <span class="cta-bottom-name">Stone<span>Media</span></span>
+      </div>
+      <span class="cta-bottom-copy">© 2026 Stone Media. Todos os direitos reservados.</span>
+    </div>
+  </div>
+
+</body>
+</html>

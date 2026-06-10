@@ -1,0 +1,54 @@
+backend:
+  name: github
+  repo: stonemediapt-web/stone-media-landing
+  branch: main
+  auth_type: implicit
+  app_id: YOUR_GITHUB_CLIENT_ID
+
+media_folder: "Logotipo"
+public_folder: "/Logotipo"
+
+collections:
+  - name: "content"
+    label: "Conteúdo do Site"
+    files:
+
+      - label: "Hero"
+        name: "hero"
+        file: "content.json"
+        fields:
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - {label: "Título linha 1", name: "title1", widget: "string"}
+              - {label: "Título destaque", name: "title2", widget: "string"}
+              - {label: "Título linha 3", name: "title3", widget: "string"}
+              - {label: "Subtítulo", name: "subtitle", widget: "text"}
+              - {label: "Botão principal", name: "cta_primary", widget: "string"}
+              - {label: "Botão secundário", name: "cta_secondary", widget: "string"}
+          - label: "Sobre"
+            name: "about"
+            widget: "object"
+            fields:
+              - {label: "Título linha 1", name: "title1", widget: "string"}
+              - {label: "Título linha 2 (itálico)", name: "title2", widget: "string"}
+              - {label: "Parágrafo 1", name: "text1", widget: "text"}
+              - {label: "Parágrafo 2", name: "text2", widget: "text"}
+          - label: "Serviços"
+            name: "services"
+            widget: "list"
+            fields:
+              - {label: "Título", name: "title", widget: "string"}
+              - {label: "Descrição", name: "description", widget: "text"}
+          - label: "Contacto"
+            name: "contact"
+            widget: "object"
+            fields:
+              - {label: "Título", name: "title", widget: "string"}
+              - {label: "Subtítulo", name: "subtitle", widget: "text"}
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - {label: "Copyright", name: "copyright", widget: "string"}

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Stone Media: Estratégia e desenvolvimento digital que transforma a presença online das marcas em crescimento real." />
   <title>Stone Media | Estratégia & Desenvolvimento Digital</title>
+  <link rel="icon" type="image/png" href="Logotipo/StoneMedia_quadrado-Photoroom.png" />
+  <link rel="apple-touch-icon" href="Logotipo/StoneMedia_quadrado-Photoroom.png" />
 
   <!-- SEO -->
   <link rel="canonical" href="https://stonemedia.pt/" />
@@ -155,24 +157,24 @@
 
         <!-- Headline -->
         <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl font-medium text-gray-900 leading-[1.08] mb-7">
-          Transformamos a sua<br />
-          <em class="not-italic text-gray-400">presença digital</em><br />
-          em crescimento real.
+          <span id="hero-title1">Transformamos a sua</span><br />
+          <em class="not-italic text-gray-400" id="hero-title2">presença digital</em><br />
+          <span id="hero-title3">em crescimento real.</span>
         </h1>
 
         <!-- Subheadline -->
-        <p class="text-lg md:text-xl text-gray-500 font-light max-w-2xl leading-relaxed mb-10">
+        <p class="text-lg md:text-xl text-gray-500 font-light max-w-2xl leading-relaxed mb-10" id="hero-subtitle">
           Estratégia, design e desenvolvimento que atraem os clientes certos, convertem visitas em vendas e constroem marcas que perduram.
         </p>
 
         <!-- CTA buttons -->
         <div class="flex flex-col sm:flex-row gap-4">
           <a href="https://calendly.com/stonemediapt/30min" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-gray-900 text-white text-sm font-medium px-8 py-4 rounded-full hover:bg-gray-700 transition-colors shadow-sm">
-            Começar um Projeto
+            <span id="hero-cta-primary">Começar um Projeto</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </a>
           <a href="#servicos" class="inline-flex items-center justify-center gap-2 border border-gray-200 bg-white text-gray-700 text-sm font-medium px-8 py-4 rounded-full hover:border-gray-400 transition-colors">
-            Ver Serviços
+            <span id="hero-cta-secondary">Ver Serviços</span>
           </a>
         </div>
 
@@ -191,14 +193,14 @@
         <div class="fade-up">
           <p class="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-6">Sobre</p>
           <h2 class="font-serif text-4xl md:text-5xl font-medium text-gray-900 leading-tight mb-7">
-            Uma visão holística<br />
-            <em class="italic text-gray-400">para o crescimento digital.</em>
+            <span id="about-title1">Uma visão holística</span><br />
+            <em class="italic text-gray-400" id="about-title2">para o crescimento digital.</em>
           </h2>
-          <p class="text-gray-500 leading-relaxed mb-5">
+          <p class="text-gray-500 leading-relaxed mb-5" id="about-text1">
             O crescimento digital não acontece por acaso. É o resultado de uma estratégia coerente, bem executada em cada ponto de contacto com o cliente. A nossa abordagem liga os pontos entre presença, autoridade, captação e retenção.
           </p>
-          <p class="text-gray-500 leading-relaxed">
-            Com experiência transversal em estratégia, conteúdo e tecnologia, ajudamos marcas a <span class="text-gray-800 font-medium">crescer de forma consistente e sustentável</span>, qualquer que seja o ponto de partida.
+          <p class="text-gray-500 leading-relaxed" id="about-text2">
+            Com experiência transversal em estratégia, conteúdo e tecnologia, ajudamos marcas a crescer de forma consistente e sustentável, qualquer que seja o ponto de partida.
           </p>
 
           <div class="flex flex-wrap gap-2.5 mt-8">
@@ -352,10 +354,10 @@
         <!-- Left column: info -->
         <div class="fade-up md:sticky top-24">
           <p class="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-6">Contacto</p>
-          <h2 class="font-serif text-4xl md:text-5xl font-medium text-gray-900 leading-tight mb-6">
+          <h2 class="font-serif text-4xl md:text-5xl font-medium text-gray-900 leading-tight mb-6" id="contact-title">
             Pronto para o próximo nível?
           </h2>
-          <p class="text-gray-500 leading-relaxed mb-10">
+          <p class="text-gray-500 leading-relaxed mb-10" id="contact-subtitle">
             Preencha o formulário e entraremos em contacto em menos de 24 horas para agendar uma chamada estratégica sem compromisso.
           </p>
 
@@ -515,6 +517,39 @@
   <script>
     // Init Lucide icons
     lucide.createIcons();
+
+    // --- Carregar conteúdo do content.json ---
+    fetch('/content.json')
+      .then(r => r.json())
+      .then(c => {
+        // Hero
+        if (c.hero) {
+          document.getElementById('hero-title1').textContent    = c.hero.title1 || '';
+          document.getElementById('hero-title2').textContent    = c.hero.title2 || '';
+          document.getElementById('hero-title3').textContent    = c.hero.title3 || '';
+          document.getElementById('hero-subtitle').textContent  = c.hero.subtitle || '';
+          document.getElementById('hero-cta-primary').textContent  = c.hero.cta_primary || '';
+          document.getElementById('hero-cta-secondary').textContent = c.hero.cta_secondary || '';
+        }
+        // Sobre
+        if (c.about) {
+          document.getElementById('about-title1').textContent = c.about.title1 || '';
+          document.getElementById('about-title2').textContent = c.about.title2 || '';
+          document.getElementById('about-text1').textContent  = c.about.text1  || '';
+          document.getElementById('about-text2').textContent  = c.about.text2  || '';
+        }
+        // Contacto
+        if (c.contact) {
+          document.getElementById('contact-title').textContent    = c.contact.title    || '';
+          document.getElementById('contact-subtitle').textContent = c.contact.subtitle || '';
+        }
+        // Footer copyright
+        if (c.footer) {
+          const cr = document.querySelector('footer p');
+          if (cr) cr.textContent = c.footer.copyright || '';
+        }
+      })
+      .catch(() => {}); // fallback: usa os textos hardcoded no HTML
 
     // --- Mobile menu ---
     const menuBtn     = document.getElementById('menuBtn');

@@ -1,0 +1,50 @@
+{
+  "hero": {
+    "title1": "Transformamos a sua",
+    "title2": "presença digital",
+    "title3": "em crescimento real.",
+    "subtitle": "Estratégia, design e desenvolvimento que atraem os clientes certos, convertem visitas em vendas e constroem marcas que perduram.",
+    "cta_primary": "Começar um Projeto",
+    "cta_secondary": "Ver Serviços"
+  },
+  "about": {
+    "title1": "Uma visão holística",
+    "title2": "para o crescimento digital.",
+    "text1": "O crescimento digital não acontece por acaso. É o resultado de uma estratégia coerente, bem executada em cada ponto de contacto com o cliente. A nossa abordagem liga os pontos entre presença, autoridade, captação e retenção.",
+    "text2": "Com experiência transversal em estratégia, conteúdo e tecnologia, ajudamos marcas a crescer de forma consistente e sustentável, qualquer que seja o ponto de partida."
+  },
+  "services": [
+    {
+      "id": "sites",
+      "title": "Sites Institucionais",
+      "description": "Presença online profissional para empresas que precisam de um site claro, rápido e bem estruturado. Ideal para transmitir credibilidade e ser encontrado no Google."
+    },
+    {
+      "id": "landing",
+      "title": "Landing Pages de Alta Conversão",
+      "description": "Páginas rápidas, focadas num único objetivo e otimizadas para campanhas pagas e orgânicas. Estrutura, copy e design a trabalhar em conjunto."
+    },
+    {
+      "id": "social",
+      "title": "Gestão de Redes Sociais",
+      "description": "Planeamento estratégico, criação de conteúdo de alta qualidade e crescimento orgânico de comunidade alinhado com a identidade da sua marca."
+    },
+    {
+      "id": "email",
+      "title": "Email Marketing & Automação",
+      "description": "Campanhas segmentadas e fluxos automáticos para nutrir leads, recuperar carrinhos abandonados e aumentar o lifetime value dos seus clientes."
+    },
+    {
+      "id": "leads",
+      "title": "Ímanes de Leads",
+      "description": "Estruturação e design de materiais ricos como e-books, checklists e templates para captar contactos qualificados e construir uma lista de email sólida."
+    }
+  ],
+  "contact": {
+    "title": "Pronto para o próximo nível?",
+    "subtitle": "Preencha o formulário e entraremos em contacto em menos de 24 horas para agendar uma chamada estratégica sem compromisso."
+  },
+  "footer": {
+    "copyright": "© 2026 Stone Media. Todos os direitos reservados."
+  }
+}
