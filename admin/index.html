@@ -507,7 +507,7 @@
     btn.textContent = 'Guardar alterações';
 
     if (error) {
-      status.textContent = 'Erro ao guardar. Tenta novamente.';
+      status.textContent = 'Erro: ' + error.message + ' (código: ' + error.code + ')';
       status.className = 'error';
     } else {
       status.textContent = 'Guardado com sucesso!';
