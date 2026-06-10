@@ -17,6 +17,9 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -557,25 +560,53 @@
 
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // --- Contact form ---
-    const form        = document.getElementById('contactForm');
-    const successState = document.getElementById('successState');
+    // --- Supabase ---
+    const SUPABASE_URL = 'https://asoacvciftbjzgqsqfja.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzb2FjdmNpZnRianpncXNxZmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzIyODEsImV4cCI6MjA5NjY0ODI4MX0.3KUBAqQut2j9HKXapWe8-F3XSe_8mw9POC2GMuMx3Tw';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    form.addEventListener('submit', (e) => {
+    // --- Contact form ---
+    const form         = document.getElementById('contactForm');
+    const successState = document.getElementById('successState');
+    const submitBtn    = form.querySelector('[type="submit"]');
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Basic validation
-      const name    = form.querySelector('[name="name"]');
-      const email   = form.querySelector('[name="email"]');
-      const service = form.querySelector('[name="service"]');
+      const nameField    = form.querySelector('[name="name"]');
+      const emailField   = form.querySelector('[name="email"]');
+      const serviceField = form.querySelector('[name="service"]');
+      const companyField = form.querySelector('[name="company"]');
+      const messageField = form.querySelector('[name="message"]');
 
-      if (!name.value.trim() || !email.value.trim() || !service.value) {
-        [name, email, service].forEach(field => {
-          if (!field.value.trim()) {
-            field.classList.add('border-red-300', 'ring-1', 'ring-red-200');
-            setTimeout(() => field.classList.remove('border-red-300', 'ring-1', 'ring-red-200'), 2500);
-          }
-        });
+      // Validation
+      let hasError = false;
+      [nameField, emailField, serviceField].forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('border-red-300', 'ring-1', 'ring-red-200');
+          setTimeout(() => field.classList.remove('border-red-300', 'ring-1', 'ring-red-200'), 2500);
+          hasError = true;
+        }
+      });
+      if (hasError) return;
+
+      // Loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> A enviar...';
+
+      const { error } = await db.from('contacts').insert({
+        name:    nameField.value.trim(),
+        email:   emailField.value.trim(),
+        company: companyField.value.trim() || null,
+        service: serviceField.value,
+        message: messageField.value.trim() || null,
+      });
+
+      if (error) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Enviar Mensagem';
+        alert('Ocorreu um erro. Por favor tente novamente.');
+        console.error(error);
         return;
       }
 
