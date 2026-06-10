@@ -3,7 +3,7 @@ backend:
   repo: stonemediapt-web/stone-media-landing
   branch: main
   auth_type: implicit
-  app_id: YOUR_GITHUB_CLIENT_ID
+  app_id: Ov23liqmZeCOsKsN5d07
 
 media_folder: "Logotipo"
 public_folder: "/Logotipo"
