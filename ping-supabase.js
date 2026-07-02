@@ -19,15 +19,19 @@ async function ping(projeto) {
     },
   });
   console.log(`[${projeto.nome}] Status: ${res.status} ${res.ok ? '✓' : '✗'}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
 
 (async () => {
   console.log(`Ping Supabase — ${new Date().toLocaleString('pt-BR')}\n`);
+  let hasError = false;
   for (const p of projetos) {
     try {
       await ping(p);
     } catch (e) {
       console.error(`[${p.nome}] Erro: ${e.message}`);
+      hasError = true;
     }
   }
+  if (hasError) process.exit(1);
 })();

@@ -25,11 +25,6 @@
       "description": "Páginas rápidas, focadas num único objetivo e otimizadas para campanhas pagas e orgânicas. Estrutura, copy e design a trabalhar em conjunto."
     },
     {
-      "id": "social",
-      "title": "Gestão de Redes Sociais",
-      "description": "Planeamento estratégico, criação de conteúdo de alta qualidade e crescimento orgânico de comunidade alinhado com a identidade da sua marca."
-    },
-    {
       "id": "email",
       "title": "Email Marketing & Automação",
       "description": "Campanhas segmentadas e fluxos automáticos para nutrir leads, recuperar carrinhos abandonados e aumentar o lifetime value dos seus clientes."
@@ -45,6 +40,6 @@
     "subtitle": "Preencha o formulário e entraremos em contacto em menos de 24 horas para agendar uma chamada estratégica sem compromisso."
   },
   "footer": {
-    "copyright": "© 2026 Stone Media. Todos os direitos reservados."
+    "copyright": "Stone Media. Todos os direitos reservados."
   }
 }

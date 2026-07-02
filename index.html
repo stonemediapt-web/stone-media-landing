@@ -544,7 +544,7 @@
 
       <div class="mt-8 pt-6 border-t border-gray-50 text-center">
         <p class="text-xs text-gray-400">
-          &copy; 2026 Stone Media. Todos os direitos reservados.
+          &copy; <span id="copyright-year">2026</span> <span id="copyright-text">Stone Media. Todos os direitos reservados.</span>
         </p>
       </div>
 
@@ -556,6 +556,9 @@
   <script>
     // Init Lucide icons
     lucide.createIcons();
+
+    // Ano do copyright sempre atualizado, independente do conteúdo carregado
+    document.getElementById('copyright-year').textContent = new Date().getFullYear();
 
     // --- Supabase ---
     const SUPABASE_URL = 'https://asoacvciftbjzgqsqfja.supabase.co';
@@ -583,7 +586,7 @@
         document.getElementById('contact-subtitle').textContent = c.contact.subtitle || '';
       }
       if (c.footer) {
-        const cr = document.querySelector('footer p');
+        const cr = document.getElementById('copyright-text');
         if (cr) cr.textContent = c.footer.copyright || '';
       }
     }
@@ -669,21 +672,18 @@
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> A enviar...';
 
-      // Guardar no Supabase
-      const { error } = await db.from('contacts').insert({
-        name:    nameField.value.trim(),
-        email:   emailField.value.trim(),
-        company: companyField.value.trim() || null,
-        service: serviceField.value,
-        message: messageField.value.trim() || null,
-      });
-
-      if (error) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Pedir Orçamento';
-        alert('Ocorreu um erro. Por favor tente novamente.');
-        console.error(error);
-        return;
+      // Guardar no Supabase (não bloqueia o envio se o Supabase estiver em baixo)
+      try {
+        const { error } = await db.from('contacts').insert({
+          name:    nameField.value.trim(),
+          email:   emailField.value.trim(),
+          company: companyField.value.trim() || null,
+          service: serviceField.value,
+          message: messageField.value.trim() || null,
+        });
+        if (error) console.error('Supabase insert erro:', error);
+      } catch (dbErr) {
+        console.error('Supabase insert erro:', dbErr);
       }
 
       // Enviar email de notificação
