@@ -28,15 +28,17 @@
     "description": "Agência de estratégia e desenvolvimento digital. Criação de sites, landing pages, gestão de redes sociais e email marketing.",
     "areaServed": "PT",
     "inLanguage": "pt-PT",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonemedia.pt/Logotipo/StoneMedia_quadrado.PNG"
+    },
     "serviceType": [
       "Criação de Sites",
       "Landing Pages",
       "Gestão de Redes Sociais",
       "Email Marketing",
-      "Ímanes de Leads"
-    ],
-    "sameAs": [
-      "https://stonemedia.pt"
+      "Ímanes de Leads",
+      "Apps & Automação de Processos"
     ]
   }
   </script>
@@ -72,7 +74,7 @@
   <!-- Google Fonts: Inter + Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
@@ -364,6 +366,22 @@
           </div>
         </div>
 
+        <!-- Card 6: Apps & Automação de Processos -->
+        <div class="card-lift fade-up bg-white rounded-2xl p-8 border border-gray-100">
+          <div class="w-11 h-11 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="zap" class="w-5 h-5 text-gray-700"></i>
+          </div>
+          <h3 class="text-gray-900 font-semibold text-lg mb-3">Apps & Automação de Processos</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">
+            Desenvolvemos aplicações simples e rápidas, sem depender de plataformas cloud pesadas ou lentas, para automatizar tarefas e melhorar os processos internos da sua empresa.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Apps à medida</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Automação</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Performance</span>
+          </div>
+        </div>
+
         <!-- CTA card (dark) -->
         <div class="card-lift fade-up bg-gray-900 rounded-2xl p-8 text-white flex flex-col">
           <p class="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-5">Pronto para crescer?</p>
@@ -476,6 +494,7 @@
                     <option value="email">Email Marketing & Automação</option>
                     <option value="leads">Ímanes de Leads</option>
                     <option value="site">Site Institucional</option>
+                    <option value="apps">Apps & Automação de Processos</option>
                     <option value="varios">Vários serviços / Não tenho a certeza</option>
                   </select>
                   <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center">
