@@ -4,14 +4,14 @@
     "title2": "presença digital",
     "title3": "em crescimento real.",
     "subtitle": "Estratégia, design e desenvolvimento que atraem os clientes certos, convertem visitas em vendas e constroem marcas que perduram.",
-    "cta_primary": "Começar um Projeto",
+    "cta_primary": "Agendar Reunião",
     "cta_secondary": "Ver Serviços"
   },
   "about": {
-    "title1": "Uma visão holística",
-    "title2": "para o crescimento digital.",
-    "text1": "O crescimento digital não acontece por acaso. É o resultado de uma estratégia coerente, bem executada em cada ponto de contacto com o cliente. A nossa abordagem liga os pontos entre presença, autoridade, captação e retenção.",
-    "text2": "Com experiência transversal em estratégia, conteúdo e tecnologia, ajudamos marcas a crescer de forma consistente e sustentável, qualquer que seja o ponto de partida."
+    "title1": "Estratégia e execução",
+    "title2": "no mesmo lugar.",
+    "text1": "Um site bonito não chega. Para trazer clientes, o site, os textos, os emails e os processos têm de trabalhar em conjunto. É isso que fazemos: pensamos a estratégia e tratamos da execução, do primeiro esboço ao lançamento.",
+    "text2": "Trabalhamos com pequenas e médias empresas que querem mais contactos e menos trabalho manual, quer estejam a começar do zero, quer queiram melhorar o que já têm."
   },
   "services": [
     {
@@ -36,7 +36,7 @@
     }
   ],
   "contact": {
-    "title": "Pronto para o próximo nível?",
+    "title": "Fale-nos do seu projeto.",
     "subtitle": "Preencha o formulário e entraremos em contacto em menos de 24 horas para agendar uma chamada estratégica sem compromisso."
   },
   "footer": {
