@@ -165,12 +165,16 @@
     #preview-panel h2 { font-size: 11px; color: #aaa; font-weight: 500; }
 
     /* ===== QUOTE PAGE ===== */
+    /* Folha(s) A4 com 10 mm de margem: a pré-visualização é exatamente o que sai na impressão.
+       A altura (nº de folhas) é definida em layoutQuote(); a faixa cinzenta marca o fim de cada folha. */
     .quote-page {
-      width: 210mm; background: #fff;
+      width: 210mm; min-height: 297mm; padding: 10mm;
+      background: repeating-linear-gradient(to bottom, #fff 0, #fff calc(297mm - 2mm), #dcdcdc calc(297mm - 2mm), #dcdcdc 297mm);
       box-shadow: 0 4px 24px rgba(0,0,0,0.08);
       border-radius: 4px; overflow: hidden;
       font-family: 'Inter', sans-serif;
     }
+    #quote-content { width: 190mm; }
 
     .quote-header {
       background: #111; color: #fff;
@@ -212,7 +216,7 @@
       padding: 3.5mm 3mm; font-size: 11px; color: #444;
       border-bottom: 1px solid #f8f8f8; vertical-align: top;
     }
-    .quote-table td:first-child { font-weight: 600; color: #111; width: 35%; }
+    .quote-table td:first-child { font-weight: 600; color: #111; width: 22%; }
     .quote-table td:last-child { text-align: right; font-weight: 600; color: #111; white-space: nowrap; }
     .quote-price-old { display: block; font-size: 10px; font-weight: 400; color: #aaa; text-decoration: line-through; }
     .quote-price-period { display: block; font-size: 9px; font-weight: 500; color: #888; margin-top: 0.5mm; }
@@ -237,7 +241,7 @@
 
     .quote-notes { background: #FAFAFA; border-radius: 6px; padding: 4mm 5mm; margin-bottom: 6mm; }
     .quote-notes p { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 2mm; }
-    .quote-notes span { font-size: 11px; color: #666; line-height: 1.6; }
+    .quote-notes span { display: block; font-size: 11px; color: #666; line-height: 1.6; white-space: pre-line; overflow-wrap: break-word; }
 
     .quote-footer {
       border-top: 1px solid #f0f0f0; padding: 5mm 12mm;
@@ -258,7 +262,7 @@
       }
       .quote-page {
         box-shadow: none !important; border-radius: 0 !important;
-        width: 100% !important; margin: 0 !important;
+        margin: 0 !important; background: #fff !important;
       }
       body { background: #fff !important; margin: 0 !important; }
       .quote-header {
@@ -270,6 +274,7 @@
         print-color-adjust: exact !important;
       }
     }
+    /* As margens e as quebras de folha já vêm da pré-visualização (.quote-page + layoutQuote) */
     @page { size: A4; margin: 0; }
   </style>
 </head>
@@ -417,6 +422,7 @@
     <h2>Pré-visualização</h2>
 
     <div class="quote-page" id="quote">
+    <div id="quote-content">
 
       <!-- Header -->
       <div class="quote-header">
@@ -496,6 +502,7 @@
       </div>
 
     </div>
+    </div>
   </div>
 </div>
 
@@ -505,6 +512,11 @@
   const STORAGE_KEY = 'stonemedia_orcamentos'; // antigo armazenamento local (migrado para o Supabase)
   const API_URL = '/gest/api/quotes';
   let savedQuotes = [];
+
+  // Folha A4 em px (96 dpi), margem de 10 mm e escala mínima antes de passar para 2 folhas
+  const MM = 96 / 25.4;
+  const PAGE_H = 297 * MM, PAGE_MARGIN = 10 * MM, PAGE_AVAIL = PAGE_H - 2 * PAGE_MARGIN;
+  const MIN_SCALE = 0.78;
 
   // Textos fixos da proposta (o conteúdo preenchido é escrito à mão no idioma escolhido)
   const I18N = {
@@ -946,6 +958,8 @@
     // Notes
     const notes = document.getElementById('f-notes').value;
     document.getElementById('q-notes').textContent = notes || '—';
+
+    layoutQuote();
   }
 
   // ===== Clientes =====
@@ -1085,8 +1099,84 @@
     const who = clean(document.getElementById('f-client-company').value) ||
                 clean(document.getElementById('f-client-name').value);
     document.title = [prefix, clean(document.getElementById('f-ref').value), who].filter(Boolean).join('_');
+    layoutQuote();
   });
   window.addEventListener('afterprint', () => { document.title = PAGE_TITLE; });
+  document.fonts.ready.then(() => layoutQuote());
+
+  // Paginação da proposta, igual na pré-visualização e na impressão:
+  // - se passar pouco de uma folha A4, encolhe para caber numa só;
+  // - se passar muito (ficaria ilegível), passa para a folha seguinte sem partir blocos a meio.
+  function layoutQuote() {
+    const sheet = document.getElementById('quote');
+    const content = document.getElementById('quote-content');
+    if (!sheet.offsetParent) return; // pré-visualização escondida (separador Clientes)
+
+    sheet.querySelectorAll('.page-spacer').forEach(el => el.remove());
+    content.style.zoom = '';
+    content.style.width = '';
+
+    let pages = 1;
+    if (content.offsetHeight > PAGE_AVAIL) {
+      // Encolher mantendo a largura total: ao alargar o texto a altura muda, por isso afina-se em 3 passos
+      let scale = 1;
+      for (let i = 0; i < 3; i++) {
+        content.style.width = (190 / scale) + 'mm';
+        scale = Math.min(1, PAGE_AVAIL / content.offsetHeight);
+      }
+      scale = Math.floor(scale * 0.995 * 1000) / 1000;
+      if (scale >= MIN_SCALE) {
+        content.style.width = (190 / scale) + 'mm';
+        content.style.zoom = scale;
+      } else {
+        content.style.width = '';
+        pages = paginateQuote(sheet, content);
+      }
+    }
+    // Ligeiramente abaixo de N folhas para a impressão não criar uma folha em branco no fim
+    sheet.style.height = `calc(${pages * 297}mm - 1px)`;
+  }
+
+  // Insere espaços antes dos blocos que ficariam cortados na mudança de folha. Devolve o nº de folhas.
+  function paginateQuote(sheet, content) {
+    const top = el => el.getBoundingClientRect().top - sheet.getBoundingClientRect().top;
+    const bottom = el => el.getBoundingClientRect().bottom - sheet.getBoundingClientRect().top;
+    const titles = content.querySelectorAll('.quote-section-title');
+    const rows = [...content.querySelectorAll('#q-services-body > tr')];
+    const headRow = content.querySelector('.quote-table thead tr');
+
+    // [início, fim, é linha da tabela] — os títulos ficam sempre com o bloco que apresentam
+    const blocks = [];
+    rows.forEach((tr, i) => blocks.push(i === 0 ? [titles[0], tr, false] : [tr, tr, true]));
+    blocks.push([content.querySelector('.quote-vat-note'), content.querySelector('.quote-vat-note'), false]);
+    blocks.push([titles[1], content.querySelector('.quote-conditions'), false]);
+    blocks.push([content.querySelector('.quote-notes'), content.querySelector('.quote-notes'), false]);
+    blocks.push([content.querySelector('.quote-footer'), content.querySelector('.quote-footer'), false]);
+
+    for (const [start, end, isRow] of blocks) {
+      if (!start || !end || end.getClientRects().length === 0) continue;
+      const t = top(start), b = bottom(end);
+      const page = Math.floor(t / PAGE_H);
+      if (b <= (page + 1) * PAGE_H - PAGE_MARGIN) continue; // cabe nesta folha
+      if (b - t > PAGE_AVAIL) continue;                     // maior que uma folha: deixa partir
+      const gap = (page + 1) * PAGE_H + PAGE_MARGIN - t;
+      if (isRow) {
+        // Linha da tabela: espaço + cabeçalho da tabela repetido no topo da nova folha
+        const spacer = document.createElement('tr');
+        spacer.className = 'page-spacer';
+        spacer.innerHTML = `<td colspan="3" style="height:${gap}px; padding:0; border:0;"></td>`;
+        const head = headRow.cloneNode(true);
+        head.className = 'page-spacer';
+        start.before(spacer, head);
+      } else {
+        const spacer = document.createElement('div');
+        spacer.className = 'page-spacer';
+        spacer.style.height = gap + 'px';
+        start.before(spacer);
+      }
+    }
+    return Math.max(1, Math.ceil((bottom(content) + PAGE_MARGIN - 1) / PAGE_H));
+  }
 
   function showTab(tab) {
     const isClients = tab === 'clients';
@@ -1096,7 +1186,7 @@
     document.getElementById('clients-panel').style.display = isClients ? 'block' : 'none';
     document.getElementById('tab-btn-quotes').classList.toggle('active', !isClients);
     document.getElementById('tab-btn-clients').classList.toggle('active', isClients);
-    if (isClients) renderClients();
+    if (isClients) renderClients(); else layoutQuote();
   }
 
   function openQuoteFromClients(id) {
