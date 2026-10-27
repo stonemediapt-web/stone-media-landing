@@ -310,6 +310,11 @@
         <button class="btn-secondary" onclick="newQuote()">Novo</button>
       </div>
       <button class="btn-delete-link" id="btn-delete-quote" onclick="deleteQuote()" style="display:none;">Apagar este orçamento guardado</button>
+      <div class="row2">
+        <button class="btn-secondary" onclick="exportQuotes()">Exportar ficheiro</button>
+        <button class="btn-secondary" onclick="document.getElementById('f-import').click()">Importar ficheiro</button>
+      </div>
+      <input type="file" id="f-import" accept=".json,application/json" style="display:none;" onchange="importQuotes(this)" />
     </div>
 
     <!-- Cliente -->
@@ -621,7 +626,11 @@
       await migrateLocalQuotes();
       setSyncStatus(savedQuotes.length + ' orçamento(s) guardado(s) online');
     } catch (e) {
-      setSyncStatus('Não foi possível carregar os orçamentos: ' + e.message, true);
+      // Sem ligação à API (ex.: ficheiro aberto no computador): mostra os guardados neste browser
+      savedQuotes = getLocalQuotes();
+      setSyncStatus(savedQuotes.length
+        ? `Sem ligação ao servidor — a mostrar ${savedQuotes.length} orçamento(s) deste browser. Usa "Exportar ficheiro" para os levar para o site.`
+        : 'Não foi possível carregar os orçamentos: ' + e.message, true);
     }
     renderSavedList();
     if (!currentQuoteId) { document.getElementById('f-ref').value = nextRef(); update(); }
@@ -629,17 +638,55 @@
 
   // Envia uma única vez os orçamentos que estavam guardados só neste browser
   async function migrateLocalQuotes() {
+    const local = getLocalQuotes();
+    if (!local.length) return;
+    await uploadMissing(local);
+    localStorage.setItem(STORAGE_KEY + '_backup', JSON.stringify(local));
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
+  function getLocalQuotes() {
     let local;
     try { local = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch (e) { local = []; }
-    if (!local.length) return;
+    return local.map(q => ({ ...q, id: String(q.id) }));
+  }
+
+  // Envia para o Supabase os orçamentos que ainda lá não estão; devolve quantos foram enviados
+  async function uploadMissing(list) {
     const ids = new Set(savedQuotes.map(q => q.id));
-    const missing = local.map(q => ({ ...q, id: String(q.id) })).filter(q => !ids.has(q.id));
+    const missing = list.filter(q => q && q.data && !ids.has(String(q.id)))
+                        .map(q => ({ ...q, id: String(q.id) }));
     if (missing.length) {
       await api('PUT', missing);
       savedQuotes.push(...missing);
     }
-    localStorage.setItem(STORAGE_KEY + '_backup', JSON.stringify(local));
-    localStorage.removeItem(STORAGE_KEY);
+    return missing.length;
+  }
+
+  function exportQuotes() {
+    if (!savedQuotes.length) { alert('Não há orçamentos para exportar.'); return; }
+    const blob = new Blob([JSON.stringify(savedQuotes, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'orcamentos-stonemedia-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  async function importQuotes(input) {
+    const file = input.files[0];
+    input.value = '';
+    if (!file) return;
+    try {
+      const list = JSON.parse(await file.text());
+      if (!Array.isArray(list)) throw new Error('ficheiro inválido');
+      const n = await uploadMissing(list);
+      renderSavedList();
+      setSyncStatus(savedQuotes.length + ' orçamento(s) guardado(s) online');
+      alert(n ? `${n} orçamento(s) importado(s).` : 'Estes orçamentos já estavam todos guardados.');
+    } catch (e) {
+      alert('Não foi possível importar: ' + e.message);
+    }
   }
 
   function collectFormData() {
