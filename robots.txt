@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /gest/
+Disallow: /apresentacao.html
+Disallow: /_template-cliente/
 
 Sitemap: https://stonemedia.pt/sitemap.xml

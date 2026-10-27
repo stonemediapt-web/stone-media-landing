@@ -1,0 +1,11 @@
+{
+  "redirects": [
+    { "source": "/orcamento.html", "destination": "/gest/", "permanent": true },
+    { "source": "/orcamento", "destination": "/gest/", "permanent": true },
+    { "source": "/Gest", "destination": "/gest/", "permanent": false },
+    { "source": "/Gest/:path*", "destination": "/gest/:path*", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/gest/api/quotes", "destination": "/api/quotes" }
+  ]
+}

@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Stone Media — Gerador de Orçamentos</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body { font-family: 'Inter', sans-serif; background: #f4f4f4; color: #111; }
+
+    /* ===== FORM PANEL ===== */
+    #app { display: flex; min-height: 100vh; }
+
+    #form-panel {
+      width: 420px; min-width: 420px; background: #eef0f3;
+      border-right: 1px solid #dfe2e6;
+      padding: 24px 20px 0; overflow-y: auto;
+      height: 100vh; position: sticky; top: 0;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    #form-panel h1 { font-size: 17px; font-weight: 700; color: #111; padding: 0 4px; }
+    #form-panel h1 span { color: #999; font-weight: 300; }
+
+    /* Cada secção é um cartão branco, para separar bem os blocos */
+    .form-section {
+      display: flex; flex-direction: column; gap: 12px;
+      background: #fff; border: 1px solid #e3e6ea; border-radius: 12px;
+      padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .form-section-title {
+      font-size: 13px; font-weight: 700; color: #111;
+      display: flex; align-items: center; gap: 8px;
+      padding-bottom: 10px; border-bottom: 1px solid #f0f1f3;
+    }
+    .form-section-title::before {
+      content: ''; width: 4px; height: 14px; border-radius: 2px; background: #111;
+    }
+
+    label { font-size: 12px; font-weight: 600; color: #333; display: block; margin-bottom: 5px; }
+
+    input, textarea, select {
+      width: 100%; border: 1.5px solid #d5d9de; border-radius: 8px;
+      padding: 10px 12px; font-size: 13px; font-family: 'Inter', sans-serif;
+      color: #111; background: #fff; transition: border 0.15s, box-shadow 0.15s;
+    }
+    input::placeholder, textarea::placeholder { color: #b5bac1; }
+    input:hover, textarea:hover, select:hover { border-color: #b8bec6; }
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: #111; box-shadow: 0 0 0 3px rgba(17,17,17,0.08);
+    }
+    textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+    select { cursor: pointer; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* Services table in form */
+    #services-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .service-row {
+      background: #f7f8fa; border: 1px solid #e3e6ea; border-left: 4px solid #111;
+      border-radius: 10px; padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 10px;
+      position: relative;
+    }
+    .service-row-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #777;
+    }
+    .presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .preset-chip {
+      background: #f2f3f5; border: 1px solid #e0e3e7; border-radius: 999px;
+      padding: 5px 10px; font-size: 11px; font-weight: 500; color: #444;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s;
+    }
+    .preset-chip:hover { border-color: #111; color: #111; }
+    .preset-chip.active { background: #111; border-color: #111; color: #fff; }
+    .export-bar {
+      position: sticky; bottom: 0; margin: 0 -20px; padding: 14px 20px 20px;
+      background: linear-gradient(to bottom, rgba(238,240,243,0), #eef0f3 30%);
+    }
+    .export-bar .btn-generate { width: 100%; }
+
+    .service-row .row2 { grid-template-columns: 2fr 1fr; }
+    .service-row .row2.row2-equal { grid-template-columns: 1fr 1fr; align-items: end; }
+
+    .remove-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: none; border: none; cursor: pointer;
+      color: #999; font-size: 11px; font-weight: 600; font-family: 'Inter', sans-serif;
+    }
+    .remove-btn:hover { color: #c00; }
+
+    #add-service {
+      background: #fff; border: 1.5px dashed #c5cad1; border-radius: 8px;
+      padding: 11px; font-size: 12px; font-weight: 600; color: #555; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.2s;
+    }
+    #add-service:hover { border-color: #111; color: #111; background: #fafafa; }
+
+    .btn-generate {
+      background: #111; color: #fff; border: none; border-radius: 10px;
+      padding: 13px; font-size: 13px; font-weight: 600;
+      font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-generate:hover { background: #333; }
+
+    .btn-secondary {
+      background: #fff; color: #111; border: 1px solid #ddd; border-radius: 8px;
+      padding: 9px; font-size: 11px; font-weight: 600;
+      font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: #aaa; background: #fafafa; }
+
+    .btn-delete-link {
+      background: none; border: none; color: #c00; font-size: 11px; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif; text-align: left; padding: 4px 0 0;
+    }
+    .btn-delete-link:hover { color: #900; text-decoration: underline; }
+
+    /* ===== TABS ===== */
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: #dfe2e6; padding: 4px; border-radius: 10px; }
+    .tab-btn {
+      background: none; border: none; border-radius: 8px; padding: 8px;
+      font-size: 12px; font-weight: 600; color: #888; cursor: pointer; font-family: 'Inter', sans-serif;
+    }
+    .tab-btn.active { background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .tab-content { display: flex; flex-direction: column; gap: 20px; }
+    .clients-summary { font-size: 12px; color: #555; line-height: 1.6; }
+    .clients-summary strong { color: #111; }
+
+    /* ===== CLIENTS ===== */
+    #clients-panel { flex: 1; padding: 32px; overflow-y: auto; display: none; }
+    #clients-panel h2 { font-size: 11px; color: #aaa; font-weight: 500; margin-bottom: 20px; }
+    #clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+    .client-card {
+      background: #fff; border-radius: 10px; padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 12px;
+    }
+    .client-card h3 { font-size: 15px; font-weight: 700; }
+    .client-card .client-company { font-size: 12px; color: #888; margin-top: 2px; }
+    .client-info { font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 3px; }
+    .client-stats { display: flex; gap: 16px; font-size: 11px; color: #888; border-top: 1px solid #f0f0f0; padding-top: 10px; }
+    .client-stats strong { color: #111; font-size: 13px; display: block; }
+    .client-quotes { display: flex; flex-direction: column; gap: 4px; }
+    .client-quote-link {
+      background: #fafafa; border: 1px solid #efefef; border-radius: 6px; padding: 7px 10px;
+      font-size: 11px; color: #333; cursor: pointer; font-family: 'Inter', sans-serif;
+      display: flex; justify-content: space-between; text-align: left;
+    }
+    .client-quote-link:hover { border-color: #aaa; }
+    .clients-empty { font-size: 13px; color: #aaa; }
+
+    /* ===== PREVIEW ===== */
+    #preview-panel {
+      flex: 1; padding: 32px; overflow-y: auto;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+
+    #preview-panel h2 { font-size: 11px; color: #aaa; font-weight: 500; }
+
+    /* ===== QUOTE PAGE ===== */
+    .quote-page {
+      width: 210mm; background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border-radius: 4px; overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .quote-header {
+      background: #111; color: #fff;
+      padding: 10mm 12mm 8mm;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .quote-brand { display: flex; align-items: center; gap: 10px; }
+    .quote-logo { height: 36px; filter: brightness(0) invert(1); }
+    .quote-brand-name { font-size: 16px; font-weight: 600; color: #fff; }
+    .quote-brand-name span { color: rgba(255,255,255,0.4); font-weight: 300; }
+    .quote-header-right { text-align: right; }
+    .quote-header-right p { font-size: 10px; color: rgba(255,255,255,0.5); line-height: 1.8; }
+    .quote-header-right strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+
+    .quote-body { padding: 8mm 12mm; }
+
+    .quote-meta {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6mm; margin-bottom: 8mm;
+      padding-bottom: 6mm; border-bottom: 1px solid #f0f0f0;
+    }
+    .quote-meta-block p { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #aaa; margin-bottom: 3px; }
+    .quote-meta-block h3 { font-size: 13px; font-weight: 600; color: #111; }
+    .quote-meta-block span { font-size: 11px; color: #666; }
+
+    .quote-section-title {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: #aaa; margin-bottom: 4mm;
+    }
+
+    .quote-table { width: 100%; border-collapse: collapse; margin-bottom: 6mm; }
+    .quote-table th {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #aaa; text-align: left;
+      padding: 0 3mm 3mm; border-bottom: 1px solid #f0f0f0;
+    }
+    .quote-table th:last-child { text-align: right; }
+    .quote-table td {
+      padding: 3.5mm 3mm; font-size: 11px; color: #444;
+      border-bottom: 1px solid #f8f8f8; vertical-align: top;
+    }
+    .quote-table td:first-child { font-weight: 600; color: #111; width: 35%; }
+    .quote-table td:last-child { text-align: right; font-weight: 600; color: #111; white-space: nowrap; }
+    .quote-price-old { display: block; font-size: 10px; font-weight: 400; color: #aaa; text-decoration: line-through; }
+    .quote-price-period { display: block; font-size: 9px; font-weight: 500; color: #888; margin-top: 0.5mm; }
+    .quote-price-badge {
+      display: inline-block; font-size: 9px; font-weight: 700; color: #fff; background: #111;
+      border-radius: 3px; padding: 0.4mm 1.5mm; margin-bottom: 1mm;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .quote-desc-list { list-style: none; display: flex; flex-direction: column; gap: 1.2mm; }
+    .quote-desc-list li { position: relative; padding-left: 3.5mm; line-height: 1.45; }
+    .quote-desc-list li::before { content: '•'; position: absolute; left: 0; color: #999; }
+
+    .quote-vat-note { font-size: 9px; color: #aaa; margin: -3mm 0 6mm; }
+
+    .quote-conditions {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 4mm; margin-bottom: 6mm;
+    }
+    .quote-condition { background: #FAFAFA; border-radius: 6px; padding: 4mm; }
+    .quote-condition p { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 2mm; }
+    .quote-condition span { font-size: 11px; font-weight: 600; color: #111; }
+
+    .quote-notes { background: #FAFAFA; border-radius: 6px; padding: 4mm 5mm; margin-bottom: 6mm; }
+    .quote-notes p { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 2mm; }
+    .quote-notes span { font-size: 11px; color: #666; line-height: 1.6; }
+
+    .quote-footer {
+      border-top: 1px solid #f0f0f0; padding: 5mm 12mm;
+      display: flex; justify-content: space-between; align-items: center;
+      background: #fff;
+    }
+    .quote-footer p { font-size: 9px; color: #ccc; }
+    .quote-footer-contact { text-align: right; }
+    .quote-footer-contact p { font-size: 9px; color: #aaa; line-height: 1.7; }
+
+    /* ===== PRINT ===== */
+    @media print {
+      #form-panel, #preview-panel h2, #clients-panel { display: none !important; }
+      #app { display: block !important; }
+      #preview-panel {
+        padding: 0 !important; margin: 0 !important;
+        display: block !important; overflow: visible !important;
+      }
+      .quote-page {
+        box-shadow: none !important; border-radius: 0 !important;
+        width: 100% !important; margin: 0 !important;
+      }
+      body { background: #fff !important; margin: 0 !important; }
+      .quote-header {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .quote-condition, .quote-notes {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+    @page { size: A4; margin: 0; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===== PAINEL DO FORMULÁRIO ===== -->
+  <div id="form-panel">
+    <h1>Stone<span>Media</span> — Orçamentos</h1>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-btn-quotes" onclick="showTab('quotes')">Orçamentos</button>
+      <button class="tab-btn" id="tab-btn-clients" onclick="showTab('clients')">Clientes</button>
+    </div>
+
+    <!-- Separador: Clientes -->
+    <div class="tab-content" id="tab-clients" style="display:none;">
+      <div class="form-section">
+        <p class="form-section-title">Pesquisar</p>
+        <input type="text" id="f-client-search" placeholder="Nome, empresa, email, NIF..." oninput="renderClients()" />
+      </div>
+      <p class="clients-summary" id="clients-summary"></p>
+    </div>
+
+    <!-- Separador: Orçamentos -->
+    <div class="tab-content" id="tab-quotes">
+
+    <!-- Orçamentos guardados -->
+    <div class="form-section">
+      <p class="form-section-title">Meus Orçamentos</p>
+      <select id="f-saved-list" onchange="loadQuote(this.value)">
+        <option value="">— Novo orçamento —</option>
+      </select>
+      <p id="sync-status" style="font-size:11px; color:#888; margin:-4px 0 8px;">A carregar orçamentos...</p>
+      <div class="row2">
+        <button class="btn-secondary" id="btn-save-quote" onclick="saveQuote()">Guardar</button>
+        <button class="btn-secondary" onclick="newQuote()">Novo</button>
+      </div>
+      <button class="btn-delete-link" id="btn-delete-quote" onclick="deleteQuote()" style="display:none;">Apagar este orçamento guardado</button>
+    </div>
+
+    <!-- Cliente -->
+    <div class="form-section">
+      <p class="form-section-title">Cliente</p>
+      <div>
+        <label>Nome do cliente</label>
+        <input type="text" id="f-client-name" placeholder="Ex: João Silva" oninput="update()" />
+      </div>
+      <div>
+        <label>Empresa</label>
+        <input type="text" id="f-client-company" placeholder="Ex: Silva & Associados" oninput="update()" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" id="f-client-email" placeholder="email@empresa.com" oninput="update()" />
+      </div>
+      <div class="row2">
+        <div>
+          <label>Telemóvel</label>
+          <input type="text" id="f-client-phone" placeholder="Ex: +351 912 345 678" oninput="update()" />
+        </div>
+        <div>
+          <label>NIF</label>
+          <input type="text" id="f-client-nif" placeholder="Ex: 123456789" oninput="update()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Orçamento -->
+    <div class="form-section">
+      <p class="form-section-title">Orçamento</p>
+      <div>
+        <label>Idioma do orçamento</label>
+        <select id="f-lang" onchange="changeLang()">
+          <option value="pt">Português</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="row2">
+        <div>
+          <label>Nº do orçamento</label>
+          <input type="text" id="f-ref" placeholder="Ex: ORC-001" oninput="update()" />
+        </div>
+        <div>
+          <label>Data</label>
+          <input type="date" id="f-date" oninput="update()" />
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label>Prazo de entrega</label>
+          <input type="text" id="f-deadline" placeholder="Ex: 15 dias úteis" oninput="update()" />
+          <div class="presets" data-target="f-deadline"></div>
+        </div>
+        <div>
+          <label>Validade</label>
+          <input type="text" id="f-validity" placeholder="Ex: 30 dias" oninput="update()" />
+          <div class="presets" data-target="f-validity"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Serviços -->
+    <div class="form-section">
+      <p class="form-section-title">Serviços</p>
+      <div id="services-list"></div>
+      <button id="add-service" onclick="addService()">+ Adicionar serviço</button>
+    </div>
+
+    <!-- Condições -->
+    <div class="form-section">
+      <p class="form-section-title">Condições de Pagamento</p>
+      <div>
+        <label>Condições</label>
+        <input type="text" id="f-payment" placeholder="Escolhe uma opção abaixo ou escreve" oninput="update()" />
+        <div class="presets" data-target="f-payment"></div>
+      </div>
+      <div>
+        <label>Notas adicionais</label>
+        <textarea id="f-notes" placeholder="Ex: Manutenção não incluída..." oninput="update()"></textarea>
+      </div>
+    </div>
+
+    <div class="export-bar">
+      <button class="btn-generate" onclick="window.print()">Exportar PDF</button>
+    </div>
+    </div>
+  </div>
+
+  <!-- ===== CLIENTES ===== -->
+  <div id="clients-panel">
+    <h2>Clientes (criados a partir dos orçamentos guardados)</h2>
+    <div id="clients-grid"></div>
+  </div>
+
+  <!-- ===== PREVIEW ===== -->
+  <div id="preview-panel">
+    <h2>Pré-visualização</h2>
+
+    <div class="quote-page" id="quote">
+
+      <!-- Header -->
+      <div class="quote-header">
+        <div class="quote-brand">
+          <img src="/Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" class="quote-logo" />
+          <span class="quote-brand-name">Stone<span>Media</span></span>
+        </div>
+        <div class="quote-header-right">
+          <p data-i18n="proposal">Proposta Comercial</p>
+          <p><strong id="q-ref">ORC-001</strong></p>
+          <p id="q-date">—</p>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="quote-body">
+
+        <!-- Meta -->
+        <div class="quote-meta" style="grid-template-columns: 1fr;">
+          <div class="quote-meta-block">
+            <p data-i18n="proposalFor">Proposta para</p>
+            <h3 id="q-client-name">Nome do Cliente</h3>
+            <span id="q-client-company" style="display:block;"></span>
+            <span id="q-client-email" style="display:block;"></span>
+            <span id="q-client-phone" style="display:block;"></span>
+            <span id="q-client-nif" style="display:block;"></span>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <p class="quote-section-title" data-i18n="services">Serviços Incluídos</p>
+        <table class="quote-table">
+          <thead>
+            <tr>
+              <th data-i18n="service">Serviço</th>
+              <th data-i18n="description">Descrição</th>
+              <th data-i18n="value">Valor</th>
+            </tr>
+          </thead>
+          <tbody id="q-services-body">
+            <tr><td colspan="3" style="color:#ccc; font-size:11px; padding: 4mm 3mm;">Adiciona serviços no formulário...</td></tr>
+          </tbody>
+        </table>
+        <p class="quote-vat-note" data-i18n="vatNote">Aos valores apresentados acresce o IVA à taxa legal em vigor.</p>
+
+        <!-- Conditions -->
+        <p class="quote-section-title" data-i18n="conditions">Condições</p>
+        <div class="quote-conditions">
+          <div class="quote-condition">
+            <p data-i18n="deadline">Prazo de Entrega</p>
+            <span id="q-deadline">—</span>
+          </div>
+          <div class="quote-condition">
+            <p data-i18n="payment">Pagamento</p>
+            <span id="q-payment">—</span>
+          </div>
+          <div class="quote-condition">
+            <p data-i18n="validity">Validade da Proposta</p>
+            <span id="q-validity">—</span>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="quote-notes" id="q-notes-block">
+          <p data-i18n="notes">Notas</p>
+          <span id="q-notes">—</span>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="quote-footer">
+        <p>Stone Media · stonemedia.pt</p>
+        <div class="quote-footer-contact">
+          <p>geral@stonemedia.pt</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let services = [];
+  let currentQuoteId = null;
+  const STORAGE_KEY = 'stonemedia_orcamentos'; // antigo armazenamento local (migrado para o Supabase)
+  const API_URL = '/gest/api/quotes';
+  let savedQuotes = [];
+
+  // Textos fixos da proposta (o conteúdo preenchido é escrito à mão no idioma escolhido)
+  const I18N = {
+    pt: {
+      proposal: 'Proposta Comercial', proposalFor: 'Proposta para', clientName: 'Nome do Cliente',
+      services: 'Serviços Incluídos', service: 'Serviço', description: 'Descrição', value: 'Valor',
+      vatNote: 'Aos valores apresentados acresce o IVA à taxa legal em vigor.',
+      conditions: 'Condições', deadline: 'Prazo de Entrega', payment: 'Pagamento',
+      validity: 'Validade da Proposta', notes: 'Notas', nif: 'NIF: ',
+      emptyServices: 'Adiciona serviços no formulário...', locale: 'pt-PT',
+      perMonth: 'por mês', perYear: 'por ano',
+    },
+    en: {
+      proposal: 'Commercial Proposal', proposalFor: 'Proposal for', clientName: 'Client Name',
+      services: 'Included Services', service: 'Service', description: 'Description', value: 'Price',
+      vatNote: 'VAT will be added to the prices shown at the applicable legal rate.',
+      conditions: 'Terms', deadline: 'Delivery Time', payment: 'Payment',
+      validity: 'Proposal Validity', notes: 'Notes', nif: 'VAT No.: ',
+      emptyServices: 'Add services in the form...', locale: 'en-GB',
+      perMonth: 'per month', perYear: 'per year',
+    },
+  };
+
+  // Opções rápidas por campo, no idioma do orçamento
+  const PRESETS = {
+    pt: {
+      'f-payment': [
+        'Pronto pagamento',
+        '50% na adjudicação · 50% na conclusão',
+        '30% na adjudicação · 70% na conclusão',
+        '100% na adjudicação',
+        'Pagamento mensal até ao dia 8 de cada mês',
+      ],
+      'f-deadline': ['7 dias úteis', '15 dias úteis', '20 dias úteis', '30 dias úteis'],
+      'f-validity': ['15 dias', '30 dias', '60 dias'],
+    },
+    en: {
+      'f-payment': [
+        'Payment upon receipt',
+        '50% upon acceptance · 50% upon completion',
+        '30% upon acceptance · 70% upon completion',
+        '100% upon acceptance',
+        'Monthly payment by the 8th of each month',
+      ],
+      'f-deadline': ['7 business days', '15 business days', '20 business days', '30 business days'],
+      'f-validity': ['15 days', '30 days', '60 days'],
+    },
+  };
+
+  function renderPresets() {
+    const lang = document.getElementById('f-lang').value;
+    document.querySelectorAll('.presets').forEach(box => {
+      const input = document.getElementById(box.dataset.target);
+      box.innerHTML = PRESETS[lang][box.dataset.target].map(p =>
+        `<button type="button" class="preset-chip${input.value === p ? ' active' : ''}"
+          onclick="applyPreset('${box.dataset.target}', this.textContent)">${p}</button>`
+      ).join('');
+    });
+  }
+
+  // Valores por defeito num orçamento novo (podem ser alterados à vontade)
+  function applyDefaults() {
+    document.getElementById('f-deadline').value = '20 dias úteis';
+    document.getElementById('f-validity').value = '30 dias';
+  }
+
+  // Ao mudar de idioma, traduz os campos que estejam com uma opção pré-definida
+  let currentLang = 'pt';
+  function changeLang() {
+    const newLang = document.getElementById('f-lang').value;
+    Object.keys(PRESETS[currentLang]).forEach(target => {
+      const input = document.getElementById(target);
+      const idx = PRESETS[currentLang][target].indexOf(input.value);
+      if (idx !== -1) input.value = PRESETS[newLang][target][idx];
+    });
+    currentLang = newLang;
+    update();
+  }
+
+  function applyPreset(target, value) {
+    document.getElementById(target).value = value;
+    update();
+  }
+
+  function t(key) {
+    return I18N[document.getElementById('f-lang').value][key];
+  }
+
+  // Set today's date
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+
+  // ===== Armazenamento (Supabase, via /gest/api/quotes) =====
+  function getSavedQuotes() {
+    return savedQuotes;
+  }
+
+  function setSyncStatus(text, isError) {
+    const el = document.getElementById('sync-status');
+    el.textContent = text;
+    el.style.color = isError ? '#c00' : '#888';
+  }
+
+  async function api(method, body, query = '') {
+    const res = await fetch(API_URL + query, {
+      method,
+      headers: body ? { 'Content-Type': 'application/json' } : {},
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Erro ' + res.status);
+    }
+    return res.json().catch(() => null);
+  }
+
+  async function loadSavedQuotes() {
+    try {
+      const rows = await api('GET');
+      savedQuotes = rows.map(r => ({ id: r.id, label: r.label, savedAt: Number(r.saved_at), data: r.data }));
+      await migrateLocalQuotes();
+      setSyncStatus(savedQuotes.length + ' orçamento(s) guardado(s) online');
+    } catch (e) {
+      setSyncStatus('Não foi possível carregar os orçamentos: ' + e.message, true);
+    }
+    renderSavedList();
+    if (!currentQuoteId) { document.getElementById('f-ref').value = nextRef(); update(); }
+  }
+
+  // Envia uma única vez os orçamentos que estavam guardados só neste browser
+  async function migrateLocalQuotes() {
+    let local;
+    try { local = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch (e) { local = []; }
+    if (!local.length) return;
+    const ids = new Set(savedQuotes.map(q => q.id));
+    const missing = local.map(q => ({ ...q, id: String(q.id) })).filter(q => !ids.has(q.id));
+    if (missing.length) {
+      await api('PUT', missing);
+      savedQuotes.push(...missing);
+    }
+    localStorage.setItem(STORAGE_KEY + '_backup', JSON.stringify(local));
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
+  function collectFormData() {
+    return {
+      clientName: document.getElementById('f-client-name').value,
+      clientCompany: document.getElementById('f-client-company').value,
+      clientEmail: document.getElementById('f-client-email').value,
+      clientPhone: document.getElementById('f-client-phone').value,
+      clientNif: document.getElementById('f-client-nif').value,
+      ref: document.getElementById('f-ref').value,
+      lang: document.getElementById('f-lang').value,
+      date: document.getElementById('f-date').value,
+      deadline: document.getElementById('f-deadline').value,
+      validity: document.getElementById('f-validity').value,
+      payment: document.getElementById('f-payment').value,
+      notes: document.getElementById('f-notes').value,
+      services: JSON.parse(JSON.stringify(services)),
+    };
+  }
+
+  function applyFormData(data) {
+    document.getElementById('f-client-name').value = data.clientName || '';
+    document.getElementById('f-client-company').value = data.clientCompany || '';
+    document.getElementById('f-client-email').value = data.clientEmail || '';
+    document.getElementById('f-client-phone').value = data.clientPhone || '';
+    document.getElementById('f-client-nif').value = data.clientNif || '';
+    document.getElementById('f-ref').value = data.ref || '';
+    document.getElementById('f-lang').value = data.lang || 'pt';
+    currentLang = data.lang || 'pt';
+    document.getElementById('f-date').value = data.date || new Date().toISOString().split('T')[0];
+    document.getElementById('f-deadline').value = data.deadline || '';
+    document.getElementById('f-validity').value = data.validity || '';
+    document.getElementById('f-payment').value = data.payment || '';
+    document.getElementById('f-notes').value = data.notes || '';
+    services = (data.services && data.services.length) ? JSON.parse(JSON.stringify(data.services)) : [];
+    if (services.length === 0) { addService(); } else { renderServiceForm(); update(); }
+  }
+
+  function renderSavedList() {
+    const list = getSavedQuotes().sort((a, b) => b.savedAt - a.savedAt);
+    const sel = document.getElementById('f-saved-list');
+    const current = currentQuoteId;
+    sel.innerHTML = '<option value="">— Novo orçamento —</option>' +
+      list.map(q => `<option value="${q.id}">${q.label}</option>`).join('');
+    sel.value = current || '';
+  }
+
+  // Próximo nº com base no maior nº já guardado (ex: ORC-007 → ORC-008)
+  function nextRef() {
+    const max = getSavedQuotes().reduce((m, q) => {
+      const match = String((q.data && q.data.ref) || '').match(/(\d+)\s*$/);
+      return match ? Math.max(m, parseInt(match[1], 10)) : m;
+    }, 0);
+    return 'ORC-' + String(max + 1).padStart(3, '0');
+  }
+
+  async function saveQuote() {
+    if (!document.getElementById('f-ref').value.trim()) {
+      document.getElementById('f-ref').value = nextRef();
+      update();
+    }
+    const data = collectFormData();
+    const label = (data.clientName || 'Sem nome') + ' — ' + data.ref;
+    const quote = { id: currentQuoteId || String(Date.now()), label, savedAt: Date.now(), data };
+    const btn = document.getElementById('btn-save-quote');
+    btn.disabled = true;
+    btn.textContent = 'A guardar...';
+    try {
+      await api('PUT', quote);
+    } catch (e) {
+      alert('Não foi possível guardar o orçamento: ' + e.message);
+      return;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Guardar';
+    }
+    currentQuoteId = quote.id;
+    const idx = savedQuotes.findIndex(q => q.id === quote.id);
+    if (idx !== -1) savedQuotes[idx] = quote; else savedQuotes.push(quote);
+    setSyncStatus('Guardado às ' + new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }));
+    renderSavedList();
+    document.getElementById('btn-delete-quote').style.display = 'block';
+  }
+
+  function loadQuote(id) {
+    if (!id) { newQuote(); return; }
+    const q = getSavedQuotes().find(q => String(q.id) === String(id));
+    if (!q) return;
+    currentQuoteId = q.id;
+    applyFormData(q.data);
+    document.getElementById('btn-delete-quote').style.display = 'block';
+  }
+
+  async function deleteQuote() {
+    if (!currentQuoteId) return;
+    if (!confirm('Apagar este orçamento guardado?')) return;
+    try {
+      await api('DELETE', null, '?id=' + encodeURIComponent(currentQuoteId));
+    } catch (e) {
+      alert('Não foi possível apagar o orçamento: ' + e.message);
+      return;
+    }
+    savedQuotes = savedQuotes.filter(q => q.id !== currentQuoteId);
+    newQuote();
+  }
+
+  function newQuote() {
+    currentQuoteId = null;
+    document.getElementById('f-client-name').value = '';
+    document.getElementById('f-client-company').value = '';
+    document.getElementById('f-client-email').value = '';
+    document.getElementById('f-client-phone').value = '';
+    document.getElementById('f-client-nif').value = '';
+    document.getElementById('f-ref').value = nextRef();
+    document.getElementById('f-lang').value = 'pt';
+    currentLang = 'pt';
+    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+    applyDefaults();
+    document.getElementById('f-payment').value = '';
+    document.getElementById('f-notes').value = '';
+    services = [];
+    addService();
+    renderSavedList();
+    document.getElementById('btn-delete-quote').style.display = 'none';
+  }
+
+  function addService() {
+    const id = Date.now();
+    services.push({ id, name: '', desc: '', value: '', billing: 'once' });
+    renderServiceForm();
+    update();
+  }
+
+  function removeService(id) {
+    services = services.filter(s => s.id !== id);
+    renderServiceForm();
+    update();
+  }
+
+  function renderServiceForm() {
+    const list = document.getElementById('services-list');
+    list.innerHTML = services.map((s, i) => `
+      <div class="service-row">
+        <p class="service-row-title">Serviço ${i + 1}</p>
+        <button class="remove-btn" onclick="removeService(${s.id})">Remover ×</button>
+        <div>
+          <label>Nome do serviço</label>
+          <input type="text" placeholder="Ex: Site Institucional" value="${s.name}"
+            oninput="updateService(${s.id}, 'name', this.value)" />
+        </div>
+        <div>
+          <label>Descrição <span style="font-weight:400; color:#aaa;">(um tópico por linha)</span></label>
+          <textarea placeholder="Ex:&#10;Design personalizado&#10;Desenvolvimento responsivo&#10;SEO básico" rows="4"
+            oninput="updateService(${s.id}, 'desc', this.value)">${s.desc}</textarea>
+        </div>
+        <div>
+          <label>Tipo de pagamento</label>
+          <select onchange="updateService(${s.id}, 'billing', this.value)">
+            <option value="once" ${(s.billing || 'once') === 'once' ? 'selected' : ''}>Pagamento único</option>
+            <option value="monthly" ${s.billing === 'monthly' ? 'selected' : ''}>Mensal</option>
+            <option value="yearly" ${s.billing === 'yearly' ? 'selected' : ''}>Anual</option>
+          </select>
+        </div>
+        <div class="row2 row2-equal">
+          <div>
+            <label>Valor final (€)</label>
+            <input type="number" placeholder="0" value="${s.value}"
+              oninput="updateService(${s.id}, 'value', this.value)" />
+          </div>
+          <div>
+            <label>Valor antes da promo <span style="font-weight:400; color:#aaa;">(opcional)</span></label>
+            <input type="number" placeholder="—" value="${s.originalValue || ''}"
+              oninput="updateService(${s.id}, 'originalValue', this.value)" />
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function updateService(id, field, value) {
+    const s = services.find(s => s.id === id);
+    if (s) s[field] = value;
+    update();
+  }
+
+  function fmt(n) {
+    return parseFloat(n || 0).toLocaleString(t('locale'), { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  // Se houver valor antes da promo maior que o final, mostra-o riscado com a % de desconto
+  function priceHtml(s) {
+    const final = parseFloat(s.value) || 0;
+    const original = parseFloat(s.originalValue) || 0;
+    const period = { monthly: t('perMonth'), yearly: t('perYear') }[s.billing];
+    const periodHtml = period ? `<span class="quote-price-period">${period}</span>` : '';
+    if (original <= final) return fmt(s.value) + periodHtml;
+    const pct = Math.round((1 - final / original) * 100);
+    return `<span class="quote-price-badge">-${pct}%</span>` +
+           `<span class="quote-price-old">${fmt(original)}</span>${fmt(final)}${periodHtml}`;
+  }
+
+  // Cada linha da descrição vira um tópico (ignora "-", "•" ou "*" escritos no início)
+  function descHtml(desc) {
+    const lines = String(desc || '').split('\n')
+      .map(l => l.replace(/^\s*[-•*]\s*/, '').trim())
+      .filter(Boolean);
+    if (lines.length === 0) return '—';
+    return '<ul class="quote-desc-list">' + lines.map(l => `<li>${esc(l)}</li>`).join('') + '</ul>';
+  }
+
+  function fmtDate(d) {
+    if (!d) return '—';
+    const [y, m, day] = d.split('-');
+    return `${day}/${m}/${y}`;
+  }
+
+  function update() {
+    // Textos fixos no idioma escolhido
+    document.querySelectorAll('#quote [data-i18n]').forEach(el => {
+      el.textContent = t(el.dataset.i18n);
+    });
+
+    // Header
+    document.getElementById('q-ref').textContent   = document.getElementById('f-ref').value   || 'ORC-001';
+    document.getElementById('q-date').textContent  = fmtDate(document.getElementById('f-date').value);
+
+    // Client
+    document.getElementById('q-client-name').textContent    = document.getElementById('f-client-name').value    || t('clientName');
+    document.getElementById('q-client-company').textContent = document.getElementById('f-client-company').value || '';
+    document.getElementById('q-client-email').textContent   = document.getElementById('f-client-email').value   || '';
+    const phone = document.getElementById('f-client-phone').value;
+    const nif   = document.getElementById('f-client-nif').value;
+    document.getElementById('q-client-phone').textContent = phone ? phone : '';
+    document.getElementById('q-client-nif').textContent   = nif   ? t('nif') + nif : '';
+
+    // Services table
+    const tbody = document.getElementById('q-services-body');
+    if (services.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="3" style="color:#ccc; font-size:11px; padding: 4mm 3mm;">${t('emptyServices')}</td></tr>`;
+    } else {
+      tbody.innerHTML = services.map(s => `
+        <tr>
+          <td>${s.name || '—'}</td>
+          <td>${descHtml(s.desc)}</td>
+          <td>${priceHtml(s)}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Conditions
+    document.getElementById('q-deadline').textContent = document.getElementById('f-deadline').value || '—';
+    document.getElementById('q-payment').textContent  = document.getElementById('f-payment').value  || '—';
+    document.getElementById('q-validity').textContent = document.getElementById('f-validity').value || '—';
+    renderPresets();
+
+    // Notes
+    const notes = document.getElementById('f-notes').value;
+    document.getElementById('q-notes').textContent = notes || '—';
+  }
+
+  // ===== Clientes =====
+  function esc(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  // Agrupa orçamentos por cliente: NIF > email > nome + empresa
+  function getClients() {
+    const map = new Map();
+    getSavedQuotes().sort((a, b) => b.savedAt - a.savedAt).forEach(q => {
+      const d = q.data || {};
+      const key = (d.clientNif || '').replace(/\s/g, '') ||
+                  (d.clientEmail || '').trim().toLowerCase() ||
+                  ((d.clientName || '') + '|' + (d.clientCompany || '')).trim().toLowerCase();
+      if (!key || key === '|') return;
+      if (!map.has(key)) {
+        map.set(key, { name: '', company: '', email: '', phone: '', nif: '', quotes: [], total: 0 });
+      }
+      const c = map.get(key);
+      // O orçamento mais recente tem prioridade; os antigos só preenchem o que falta
+      c.name = c.name || d.clientName;
+      c.company = c.company || d.clientCompany;
+      c.email = c.email || d.clientEmail;
+      c.phone = c.phone || d.clientPhone;
+      c.nif = c.nif || d.clientNif;
+      const total = (d.services || []).reduce((s, x) => s + (parseFloat(x.value) || 0), 0);
+      c.total += total;
+      c.quotes.push({ id: q.id, ref: d.ref, date: d.date, total });
+    });
+    return [...map.values()].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt'));
+  }
+
+  function eur(n) {
+    return n.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  function renderClients() {
+    const all = getClients();
+    const term = document.getElementById('f-client-search').value.trim().toLowerCase();
+    const clients = term
+      ? all.filter(c => [c.name, c.company, c.email, c.phone, c.nif].join(' ').toLowerCase().includes(term))
+      : all;
+
+    const totalQuotes = all.reduce((s, c) => s + c.quotes.length, 0);
+    document.getElementById('clients-summary').innerHTML =
+      `<strong>${all.length}</strong> cliente(s) · <strong>${totalQuotes}</strong> orçamento(s) guardado(s)`;
+
+    const grid = document.getElementById('clients-grid');
+    if (clients.length === 0) {
+      grid.innerHTML = `<p class="clients-empty">${all.length ? 'Nenhum cliente encontrado.' : 'Ainda não há clientes. Guarda um orçamento para o cliente aparecer aqui.'}</p>`;
+      return;
+    }
+    grid.innerHTML = clients.map((c, i) => `
+      <div class="client-card">
+        <div>
+          <h3>${esc(c.name) || 'Sem nome'}</h3>
+          ${c.company ? `<p class="client-company">${esc(c.company)}</p>` : ''}
+        </div>
+        <div class="client-info">
+          ${c.email ? `<span>${esc(c.email)}</span>` : ''}
+          ${c.phone ? `<span>${esc(c.phone)}</span>` : ''}
+          ${c.nif ? `<span>NIF: ${esc(c.nif)}</span>` : ''}
+        </div>
+        <div class="client-stats">
+          <div><strong>${c.quotes.length}</strong>orçamento(s)</div>
+          <div><strong>${eur(c.total)}</strong>total orçamentado</div>
+        </div>
+        <div class="client-quotes">
+          ${c.quotes.map(q => `
+            <button class="client-quote-link" onclick="openQuoteFromClients('${q.id}')">
+              <span>${esc(q.ref) || 'Sem nº'} · ${fmtDate(q.date)}</span>
+              <span>${eur(q.total)}</span>
+            </button>`).join('')}
+        </div>
+        <button class="btn-secondary" onclick="newQuoteForClient(${i})">+ Novo orçamento para este cliente</button>
+      </div>
+    `).join('');
+    grid._clients = clients;
+  }
+
+  function showTab(tab) {
+    const isClients = tab === 'clients';
+    document.getElementById('tab-quotes').style.display = isClients ? 'none' : 'flex';
+    document.getElementById('tab-clients').style.display = isClients ? 'flex' : 'none';
+    document.getElementById('preview-panel').style.display = isClients ? 'none' : 'flex';
+    document.getElementById('clients-panel').style.display = isClients ? 'block' : 'none';
+    document.getElementById('tab-btn-quotes').classList.toggle('active', !isClients);
+    document.getElementById('tab-btn-clients').classList.toggle('active', isClients);
+    if (isClients) renderClients();
+  }
+
+  function openQuoteFromClients(id) {
+    showTab('quotes');
+    loadQuote(id);
+    renderSavedList();
+  }
+
+  function newQuoteForClient(i) {
+    const c = document.getElementById('clients-grid')._clients[i];
+    showTab('quotes');
+    newQuote();
+    document.getElementById('f-client-name').value = c.name || '';
+    document.getElementById('f-client-company').value = c.company || '';
+    document.getElementById('f-client-email').value = c.email || '';
+    document.getElementById('f-client-phone').value = c.phone || '';
+    document.getElementById('f-client-nif').value = c.nif || '';
+    update();
+  }
+
+  // Init with one service row
+  document.getElementById('f-ref').value = nextRef();
+  applyDefaults();
+  renderSavedList();
+  addService();
+  loadSavedQuotes();
+</script>
+
+</body>
+</html>
