@@ -1077,6 +1077,17 @@
     }
   }
 
+  // Nome do PDF = título da página na altura de imprimir: Orçamento_ORC-001_Empresa / Quote_ORC-001_Company
+  const PAGE_TITLE = document.title;
+  window.addEventListener('beforeprint', () => {
+    const clean = s => String(s || '').replace(/[\\/:*?"<>|]/g, '').trim();
+    const prefix = document.getElementById('f-lang').value === 'en' ? 'Quote' : 'Orçamento';
+    const who = clean(document.getElementById('f-client-company').value) ||
+                clean(document.getElementById('f-client-name').value);
+    document.title = [prefix, clean(document.getElementById('f-ref').value), who].filter(Boolean).join('_');
+  });
+  window.addEventListener('afterprint', () => { document.title = PAGE_TITLE; });
+
   function showTab(tab) {
     const isClients = tab === 'clients';
     document.getElementById('tab-quotes').style.display = isClients ? 'none' : 'flex';
