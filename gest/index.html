@@ -293,6 +293,7 @@
         <input type="text" id="f-client-search" placeholder="Nome, empresa, email, NIF..." oninput="renderClients()" />
       </div>
       <p class="clients-summary" id="clients-summary"></p>
+      <button class="btn-secondary" id="btn-export-clients" onclick="exportClientsExcel()">Exportar clientes (Excel)</button>
     </div>
 
     <!-- Separador: Orçamentos -->
@@ -1024,6 +1025,56 @@
       </div>
     `).join('');
     grid._clients = clients;
+  }
+
+  // Carrega a biblioteca SheetJS só quando é precisa
+  function loadSheetJS() {
+    if (window.XLSX) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+      s.onload = resolve;
+      s.onerror = () => reject(new Error('não foi possível carregar a biblioteca do Excel'));
+      document.head.appendChild(s);
+    });
+  }
+
+  // Exporta os clientes (respeitando a pesquisa atual) para .xlsx
+  async function exportClientsExcel() {
+    const term = document.getElementById('f-client-search').value.trim().toLowerCase();
+    const clients = getClients().filter(c => !term ||
+      [c.name, c.company, c.email, c.phone, c.nif].join(' ').toLowerCase().includes(term));
+    if (!clients.length) { alert('Não há clientes para exportar.'); return; }
+
+    const btn = document.getElementById('btn-export-clients');
+    btn.disabled = true;
+    try {
+      await loadSheetJS();
+      const rows = clients.map(c => {
+        const dates = c.quotes.map(q => q.date).filter(Boolean).sort();
+        return {
+          'Nome': c.name || '',
+          'Empresa': c.company || '',
+          'Email': c.email || '',
+          'Telefone': c.phone || '',
+          'NIF': c.nif || '',
+          'Nº orçamentos': c.quotes.length,
+          'Total orçamentado (€)': Math.round(c.total * 100) / 100,
+          'Último orçamento': dates.length ? fmtDate(dates[dates.length - 1]) : '',
+          'Referências': c.quotes.map(q => q.ref).filter(Boolean).join(', '),
+        };
+      });
+      const ws = XLSX.utils.json_to_sheet(rows);
+      ws['!cols'] = [{ wch: 28 }, { wch: 28 }, { wch: 30 }, { wch: 16 }, { wch: 14 },
+                     { wch: 14 }, { wch: 20 }, { wch: 16 }, { wch: 30 }];
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Clientes');
+      XLSX.writeFile(wb, 'clientes-stonemedia-' + new Date().toISOString().split('T')[0] + '.xlsx');
+    } catch (e) {
+      alert('Não foi possível exportar: ' + e.message);
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   function showTab(tab) {
