@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Stone Media: websites, landing pages, email marketing and automation for businesses that want more clients and less manual work." />
+  <title>Stone Media | Digital Strategy & Development</title>
+  <link rel="icon" type="image/png" href="/Logotipo/StoneMedia_quadrado-Photoroom.png" />
+  <link rel="apple-touch-icon" href="/Logotipo/StoneMedia_quadrado-Photoroom.png" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RPNZCL57D6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RPNZCL57D6');
+  </script>
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Stone Media",
+    "url": "https://stonemedia.pt/en/",
+    "email": "geral@stonemedia.pt",
+    "description": "Digital strategy and development agency. Websites, landing pages, email marketing, lead magnets and process automation.",
+    "areaServed": "PT",
+    "inLanguage": "en",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonemedia.pt/Logotipo/StoneMedia_quadrado.PNG"
+    },
+    "serviceType": [
+      "Website Design",
+      "Landing Pages",
+      "Email Marketing",
+      "Lead Magnets",
+      "Apps & Process Automation"
+    ],
+    "sameAs": [
+      "https://www.instagram.com/stonemediapt/",
+      "https://www.facebook.com/1198713989988344"
+    ]
+  }
+  </script>
+
+  <!-- SEO -->
+  <link rel="canonical" href="https://stonemedia.pt/en/" />
+  <link rel="alternate" hreflang="pt-PT" href="https://stonemedia.pt/" />
+  <link rel="alternate" hreflang="en" href="https://stonemedia.pt/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://stonemedia.pt/" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Stone Media" />
+  <meta name="keywords" content="website design, business websites, landing pages, email marketing, process automation, lead magnets, digital strategy, digital marketing portugal, digital agency portugal, web design portugal" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://stonemedia.pt/en/" />
+  <meta property="og:title" content="Stone Media | Digital Strategy & Development" />
+  <meta property="og:description" content="Strategy, design and development that attract the right clients, turn visits into sales and build brands that last." />
+  <meta property="og:image" content="https://stonemedia.pt/Logotipo/StoneMedia_quadrado.PNG" />
+  <meta property="og:locale" content="en_GB" />
+  <meta property="og:locale:alternate" content="pt_PT" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Stone Media | Digital Strategy & Development" />
+  <meta name="twitter:description" content="Strategy, design and development that attract the right clients, turn visits into sales and build brands that last." />
+  <meta name="twitter:image" content="https://stonemedia.pt/Logotipo/StoneMedia_quadrado.PNG" />
+
+  <!-- Preconnect CDNs -->
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="preconnect" href="https://unpkg.com" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Inter + Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('D5fFUPpKCvc1G5poi');</script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    /* Underline animation for nav links */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: #111827;
+      transition: width 0.25s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Card hover lift */
+    .card-lift {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-lift:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.07);
+    }
+
+    /* Fade-up on scroll */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Select arrow reset */
+    select { background-image: none; }
+  </style>
+</head>
+
+<body class="bg-white text-gray-900 font-sans antialiased">
+
+  <!-- ===================== NAVIGATION ===================== -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-shadow duration-300">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5">
+        <img src="/Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" width="40" height="40" style="filter: brightness(0);" class="h-10 w-auto" />
+        <span class="text-xl font-semibold tracking-tight text-gray-900">Stone<span class="text-gray-400 font-light">Media</span></span>
+      </a>
+
+      <!-- Desktop links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm text-gray-500">
+        <a href="#about"    class="nav-link font-semibold hover:text-gray-900 transition-colors">About</a>
+        <a href="#services" class="nav-link font-semibold hover:text-gray-900 transition-colors">Services</a>
+        <a href="/blog/index.html" hreflang="pt" class="nav-link font-semibold hover:text-gray-900 transition-colors">Blog <span class="font-normal text-gray-400">(PT)</span></a>
+        <a href="#contact" class="nav-link font-semibold hover:text-gray-900 transition-colors">Contact</a>
+        <span class="flex items-center gap-1.5 text-xs font-semibold">
+          <a href="/" hreflang="pt-PT" lang="pt" aria-label="Versão em português" class="hover:text-gray-900 transition-colors">PT</a>
+          <span class="text-gray-300">/</span>
+          <span class="text-gray-900" aria-current="true">EN</span>
+        </span>
+        <a href="https://www.instagram.com/stonemediapt/" target="_blank" rel="noopener noreferrer" aria-label="Stone Media on Instagram" class="hover:text-gray-900 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://www.facebook.com/1198713989988344" target="_blank" rel="noopener noreferrer" aria-label="Stone Media on Facebook" class="hover:text-gray-900 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+      </nav>
+
+      <a href="https://calendly.com/stonemediapt/30min" target="_blank" rel="noopener noreferrer" class="hidden md:inline-flex items-center gap-1.5 bg-gray-900 text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-gray-700 transition-colors">
+        Book a Call
+        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+      </a>
+
+      <!-- Mobile hamburger -->
+      <button id="menuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Open menu">
+        <i data-lucide="menu" class="w-5 h-5 text-gray-700"></i>
+      </button>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-gray-100 bg-white px-6 pb-5 pt-4 space-y-1">
+      <a href="#about"    class="block py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">About</a>
+      <a href="#services" class="block py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">Services</a>
+      <a href="/blog/index.html" hreflang="pt" class="block py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">Blog <span class="font-normal text-gray-400">(PT)</span></a>
+      <a href="#contact" class="block py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
+      <div class="flex items-center gap-1.5 py-2 text-sm font-semibold">
+        <a href="/" hreflang="pt-PT" lang="pt" aria-label="Versão em português" class="text-gray-500 hover:text-gray-900 transition-colors">PT</a>
+        <span class="text-gray-300">/</span>
+        <span class="text-gray-900" aria-current="true">EN</span>
+      </div>
+      <div class="flex items-center gap-4 pt-2 pb-1">
+        <a href="https://www.instagram.com/stonemediapt/" target="_blank" rel="noopener noreferrer" aria-label="Stone Media on Instagram" class="text-gray-500 hover:text-gray-900 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://www.facebook.com/1198713989988344" target="_blank" rel="noopener noreferrer" aria-label="Stone Media on Facebook" class="text-gray-500 hover:text-gray-900 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+      </div>
+      <div class="pt-3">
+        <a href="https://calendly.com/stonemediapt/30min" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-gray-900 text-white text-sm font-medium px-5 py-2.5 rounded-full">
+          Book a Call
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ===================== HERO ===================== -->
+  <section class="min-h-screen flex items-center pt-24 pb-20 bg-[#FAFAFA]">
+    <div class="max-w-6xl mx-auto px-6 w-full">
+      <div class="max-w-4xl">
+
+        <!-- Status badge -->
+        <div class="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-500 text-xs px-4 py-2 rounded-full mb-10 shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Available for new projects
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl font-medium text-gray-900 leading-[1.08] mb-7">
+          <span>We turn your</span><br />
+          <em class="not-italic text-gray-400">digital presence</em><br />
+          <span>into real growth.</span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p class="text-lg md:text-xl text-gray-500 font-light max-w-2xl leading-relaxed mb-10">
+          Strategy, design and development that attract the right clients, turn visits into sales and build brands that last.
+        </p>
+
+        <!-- CTA buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="https://calendly.com/stonemediapt/30min" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-gray-900 text-white text-sm font-medium px-8 py-4 rounded-full hover:bg-gray-700 transition-colors shadow-sm">
+            <span>Book a Call</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="#services" class="inline-flex items-center justify-center gap-2 border border-gray-200 bg-white text-gray-700 text-sm font-medium px-8 py-4 rounded-full hover:border-gray-400 transition-colors">
+            <span>See Services</span>
+          </a>
+        </div>
+
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" class="py-28 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+
+        <!-- Text -->
+        <div class="fade-up">
+          <p class="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-6">About</p>
+          <h2 class="font-serif text-4xl md:text-5xl font-medium text-gray-900 leading-tight mb-7">
+            <span>Strategy and execution</span><br />
+            <em class="italic text-gray-400">under one roof.</em>
+          </h2>
+          <p class="text-gray-500 leading-relaxed mb-5">
+            A beautiful website isn't enough. To bring in clients, your website, copy, emails and processes have to work together. That's what we do: we think through the strategy and handle the execution, from the first sketch to launch.
+          </p>
+          <p class="text-gray-500 leading-relaxed">
+            We work with small and medium-sized businesses that want more leads and less manual work, whether they're starting from scratch or want to improve what they already have.
+          </p>
+
+          <div class="flex flex-wrap gap-2.5 mt-8">
+            <span class="text-xs text-gray-500 border border-gray-200 px-3 py-1.5 rounded-full">Strategy + Execution</span>
+            <span class="text-xs text-gray-500 border border-gray-200 px-3 py-1.5 rounded-full">Hands-on Support</span>
+            <span class="text-xs text-gray-500 border border-gray-200 px-3 py-1.5 rounded-full">Digital Experience</span>
+            <span class="text-xs text-gray-500 border border-gray-200 px-3 py-1.5 rounded-full">Measurable Results</span>
+          </div>
+        </div>
+
+        <!-- Visual block -->
+        <div class="fade-up">
+          <div class="bg-[#F5F0EA] rounded-3xl p-12 flex flex-col items-center justify-center gap-2 relative overflow-hidden min-h-[340px]">
+            <p class="font-serif text-5xl font-medium text-gray-600 z-10">Digital</p>
+            <p class="font-serif text-5xl font-medium italic text-gray-400 z-10">Strategy</p>
+            <p class="font-serif text-5xl font-medium text-gray-300 z-10">+ Growth</p>
+            <!-- Decorative blobs -->
+            <div class="absolute -top-12 -right-12 w-48 h-48 bg-white/50 rounded-full pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-36 h-36 bg-white/30 rounded-full pointer-events-none"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== SERVICES ===================== -->
+  <section id="services" class="py-28 bg-[#FAFAFA]">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <!-- Section header -->
+      <div class="text-center mb-16 fade-up">
+        <p class="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-4">Services</p>
+        <h2 class="font-serif text-4xl md:text-5xl font-medium text-gray-900 leading-tight">
+          What we do for you
+        </h2>
+        <p class="text-gray-500 mt-4 max-w-xl mx-auto leading-relaxed">
+          A complete suite of digital services designed to bring more clients to your business.
+        </p>
+      </div>
+
+      <!-- Services grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <!-- Card 1: Business Websites -->
+        <div class="card-lift fade-up bg-white rounded-2xl p-8 border border-gray-100">
+          <div class="w-11 h-11 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="globe" class="w-5 h-5 text-gray-700"></i>
+          </div>
+          <h3 class="text-gray-900 font-semibold text-lg mb-3">Business Websites</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">
+            A professional online presence for businesses that need a clear, fast, well-structured website. Ideal for building credibility and getting found on Google.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">SEO</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Mobile-first</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Landing Pages -->
+        <div class="card-lift fade-up bg-white rounded-2xl p-8 border border-gray-100">
+          <div class="w-11 h-11 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="layout" class="w-5 h-5 text-gray-700"></i>
+          </div>
+          <h3 class="text-gray-900 font-semibold text-lg mb-3">High-Converting Landing Pages</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">
+            Fast pages focused on a single goal and optimised for paid and organic campaigns. Structure, copy and design working together.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">CRO</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Performance</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Design</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Email Marketing -->
+        <div class="card-lift fade-up bg-white rounded-2xl p-8 border border-gray-100">
+          <div class="w-11 h-11 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="mail" class="w-5 h-5 text-gray-700"></i>
+          </div>
+          <h3 class="text-gray-900 font-semibold text-lg mb-3">Email Marketing & Automation</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">
+            Segmented campaigns and automated flows to nurture leads, recover abandoned carts and increase your clients' lifetime value.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Automation</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Segmentation</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Nurturing</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Lead Magnets -->
+        <div class="card-lift fade-up bg-white rounded-2xl p-8 border border-gray-100">
+          <div class="w-11 h-11 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="magnet" class="w-5 h-5 text-gray-700"></i>
+          </div>
+          <h3 class="text-gray-900 font-semibold text-lg mb-3">Lead Magnets</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">
+            Structure and design of rich content such as e-books, checklists and templates to capture qualified leads and build a solid email list.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">E-books</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Checklists</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Templates</span>
+          </div>
+        </div>
+
+        <!-- Card 6: Apps & Process Automation -->
+        <div class="card-lift fade-up bg-white rounded-2xl p-8 border border-gray-100">
+          <div class="w-11 h-11 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="zap" class="w-5 h-5 text-gray-700"></i>
+          </div>
+          <h3 class="text-gray-900 font-semibold text-lg mb-3">Apps & Process Automation</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">
+            We build lightweight, custom applications that automate repetitive tasks and simplify your company's internal processes.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Custom apps</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Automation</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">Performance</span>
+          </div>
+        </div>
+
+        <!-- CTA card (dark) -->
+        <div class="card-lift fade-up bg-gray-900 rounded-2xl p-8 text-white flex flex-col">
+          <p class="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-5">No commitment</p>
+          <h3 class="font-serif text-2xl font-medium leading-snug mb-4">
+            Let's talk about your project.
+          </h3>
+          <p class="text-gray-400 text-sm leading-relaxed mb-8 flex-1">
+            A 30-minute call is all it takes to see how we can help your brand.
+          </p>
+          <a href="https://calendly.com/stonemediapt/30min" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-white text-gray-900 text-sm font-medium px-5 py-3 rounded-full hover:bg-gray-100 transition-colors self-start">
+            Book a Call
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== CONTACT ===================== -->
+  <section id="contact" class="py-28 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-start">
+
+        <!-- Left column: info -->
+        <div class="fade-up md:sticky top-24">
+          <p class="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-6">Contact</p>
+          <h2 class="font-serif text-4xl md:text-5xl font-medium text-gray-900 leading-tight mb-6">
+            Tell us about your project.
+          </h2>
+          <p class="text-gray-500 leading-relaxed mb-10">
+            Fill in the form and we'll get back to you within 24 hours to schedule a no-commitment strategy call.
+          </p>
+
+          <ul class="space-y-5">
+            <li class="flex items-start gap-4">
+              <div class="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i data-lucide="check" class="w-4 h-4 text-gray-700"></i>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-gray-800">Free assessment</p>
+                <p class="text-sm text-gray-500 mt-0.5">We review your current situation at no cost and with no strings attached.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4">
+              <div class="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i data-lucide="check" class="w-4 h-4 text-gray-700"></i>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-gray-800">Tailored proposal</p>
+                <p class="text-sm text-gray-500 mt-0.5">Solutions adapted to your business and your budget.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4">
+              <div class="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i data-lucide="check" class="w-4 h-4 text-gray-700"></i>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-gray-800">Fixed price</p>
+                <p class="text-sm text-gray-500 mt-0.5">You know exactly what you'll pay before we start.</p>
+              </div>
+            </li>
+          </ul>
+
+          <!-- Email alternative -->
+          <div class="mt-10 pt-8 border-t border-gray-100">
+            <p class="text-sm text-gray-400 mb-4">Prefer to send us an email?</p>
+            <a href="mailto:geral@stonemedia.pt"
+              class="inline-flex items-center gap-3 border border-gray-200 text-gray-700 text-sm font-medium px-5 py-3 rounded-full hover:border-gray-400 transition-colors">
+              <i data-lucide="mail" class="w-4 h-4 text-gray-500 flex-shrink-0"></i>
+              geral@stonemedia.pt
+            </a>
+          </div>
+        </div>
+
+        <!-- Right column: form -->
+        <div class="fade-up">
+          <div class="bg-[#FAFAFA] border border-gray-100 rounded-2xl p-8">
+
+            <!-- Form -->
+            <form id="contactForm" novalidate class="space-y-5">
+              <div class="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label for="name" class="block text-xs font-semibold text-gray-600 mb-2">Name *</label>
+                  <input id="name" type="text" name="name" required autocomplete="name" placeholder="Your name"
+                    class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-400 transition" />
+                </div>
+                <div>
+                  <label for="email" class="block text-xs font-semibold text-gray-600 mb-2">Email *</label>
+                  <input id="email" type="email" name="email" required autocomplete="email" placeholder="email@company.com"
+                    class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-400 transition" />
+                </div>
+              </div>
+
+              <div>
+                <label for="company" class="block text-xs font-semibold text-gray-600 mb-2">Company / Brand</label>
+                <input id="company" type="text" name="company" autocomplete="organization" placeholder="Your company name (optional)"
+                  class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-400 transition" />
+              </div>
+
+              <div>
+                <label for="service" class="block text-xs font-semibold text-gray-600 mb-2">Service of interest *</label>
+                <div class="relative">
+                  <select id="service" name="service" required
+                    class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-400 transition pr-10 appearance-none">
+                    <option value="" disabled selected>Select a service</option>
+                    <option value="landing">High-Converting Landing Page</option>
+                    <option value="email">Email Marketing & Automation</option>
+                    <option value="leads">Lead Magnets</option>
+                    <option value="site">Business Website</option>
+                    <option value="apps">Apps & Process Automation</option>
+                    <option value="varios">Several services / Not sure yet</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center">
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="message" class="block text-xs font-semibold text-gray-600 mb-2">Message</label>
+                <textarea id="message" name="message" rows="4" placeholder="Tell us a little about your project and goals..."
+                  class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-400 transition resize-none"></textarea>
+              </div>
+
+              <button type="submit"
+                class="w-full flex items-center justify-center gap-2 bg-gray-900 text-white text-sm font-semibold py-4 rounded-xl hover:bg-gray-700 active:scale-[0.99] transition-all">
+                Request a Quote
+                <i data-lucide="send" class="w-4 h-4"></i>
+              </button>
+
+              <p class="text-xs text-gray-400 text-center">
+                Your data is safe. We never send spam.
+              </p>
+            </form>
+
+            <!-- Success state -->
+            <div id="successState" class="hidden text-center py-12">
+              <div class="w-14 h-14 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5">
+                <i data-lucide="check-circle" class="w-7 h-7 text-emerald-500"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 text-lg mb-2">Message sent!</h3>
+              <p class="text-sm text-gray-500 leading-relaxed">
+                Thanks for getting in touch. We'll get back to you<br />within 24 hours.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="border-t border-gray-100 bg-white py-10">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+
+        <!-- Brand -->
+        <a href="#" class="flex items-center gap-2.5">
+          <img src="/Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" width="36" height="36" style="filter: brightness(0);" class="h-9 w-auto" />
+          <span class="text-lg font-semibold tracking-tight text-gray-900">Stone<span class="text-gray-400 font-light">Media</span></span>
+        </a>
+
+        <!-- Nav -->
+        <nav class="flex items-center gap-6 text-sm text-gray-500">
+          <a href="#about"    class="hover:text-gray-900 transition-colors">About</a>
+          <a href="#services" class="hover:text-gray-900 transition-colors">Services</a>
+          <a href="/blog/index.html" hreflang="pt" class="hover:text-gray-900 transition-colors">Blog</a>
+          <a href="#contact" class="hover:text-gray-900 transition-colors">Contact</a>
+          <a href="/" hreflang="pt-PT" lang="pt" class="hover:text-gray-900 transition-colors">Português</a>
+        </nav>
+
+        <!-- Social -->
+        <div class="flex items-center gap-4 text-gray-400">
+          <a href="https://www.instagram.com/stonemediapt/" target="_blank" rel="noopener noreferrer" aria-label="Stone Media on Instagram" class="hover:text-gray-900 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="https://www.facebook.com/1198713989988344" target="_blank" rel="noopener noreferrer" aria-label="Stone Media on Facebook" class="hover:text-gray-900 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-gray-50 text-center">
+        <p class="text-xs text-gray-400">
+          &copy; <span id="copyright-year">2026</span> Stone Media. All rights reserved.
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <script>
+    // Init Lucide icons
+    lucide.createIcons();
+
+    document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+    // --- Supabase (só para guardar contactos; o conteúdo editável do CMS é apenas PT) ---
+    const SUPABASE_URL = 'https://asoacvciftbjzgqsqfja.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzb2FjdmNpZnRianpncXNxZmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzIyODEsImV4cCI6MjA5NjY0ODI4MX0.3KUBAqQut2j9HKXapWe8-F3XSe_8mw9POC2GMuMx3Tw';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // --- Mobile menu ---
+    const menuBtn     = document.getElementById('menuBtn');
+    const mobileMenu  = document.getElementById('mobileMenu');
+
+    menuBtn.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden', isOpen);
+      const icon = menuBtn.querySelector('[data-lucide]');
+      icon.setAttribute('data-lucide', isOpen ? 'menu' : 'x');
+      lucide.createIcons();
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        const icon = menuBtn.querySelector('[data-lucide]');
+        icon.setAttribute('data-lucide', 'menu');
+        lucide.createIcons();
+      });
+    });
+
+    // --- Navbar shadow on scroll ---
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar')
+        .classList.toggle('shadow-sm', window.scrollY > 12);
+    });
+
+    // --- Scroll-triggered fade-up ---
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // --- Contact form ---
+    const form         = document.getElementById('contactForm');
+    const successState = document.getElementById('successState');
+    const submitBtn    = form.querySelector('[type="submit"]');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nameField    = form.querySelector('[name="name"]');
+      const emailField   = form.querySelector('[name="email"]');
+      const serviceField = form.querySelector('[name="service"]');
+      const companyField = form.querySelector('[name="company"]');
+      const messageField = form.querySelector('[name="message"]');
+
+      // Validation
+      let hasError = false;
+      [nameField, emailField, serviceField].forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('border-red-300', 'ring-1', 'ring-red-200');
+          setTimeout(() => field.classList.remove('border-red-300', 'ring-1', 'ring-red-200'), 2500);
+          hasError = true;
+        }
+      });
+      if (hasError) return;
+
+      // Loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> Sending...';
+
+      // Guardar no Supabase (não bloqueia o envio se o Supabase estiver em baixo)
+      try {
+        const { error } = await db.from('contacts').insert({
+          name:    nameField.value.trim(),
+          email:   emailField.value.trim(),
+          company: companyField.value.trim() || null,
+          service: serviceField.value,
+          message: messageField.value.trim() || null,
+        });
+        if (error) console.error('Supabase insert erro:', error);
+      } catch (dbErr) {
+        console.error('Supabase insert erro:', dbErr);
+      }
+
+      // Enviar email de notificação (assinalado como vindo do site EN)
+      try {
+        const emailResult = await emailjs.send('service_rdbp4xk', 'template_1xe84wx', {
+          name:    nameField.value.trim(),
+          email:   emailField.value.trim(),
+          company: companyField.value.trim() || 'Não indicado',
+          service: '[EN] ' + serviceField.options[serviceField.selectedIndex].text,
+          message: messageField.value.trim() || 'Sem mensagem',
+        });
+        console.log('EmailJS OK:', emailResult);
+      } catch (emailErr) {
+        console.error('EmailJS ERRO:', emailErr);
+      }
+
+      // Show success
+      form.style.transition = 'opacity 0.3s';
+      form.style.opacity = '0';
+      setTimeout(() => {
+        form.classList.add('hidden');
+        successState.classList.remove('hidden');
+        lucide.createIcons();
+      }, 300);
+    });
+  </script>
+
+</body>
+</html>
