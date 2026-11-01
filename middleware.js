@@ -2,7 +2,7 @@
 import { isAuthorized, unauthorized } from './lib/gest-auth.mjs';
 
 export const config = {
-  matcher: ['/gest', '/gest/:path*', '/api/:path*'],
+  matcher: ['/gest', '/gest/:path*', '/api/((?!keep-alive).*)'],
 };
 
 export default function middleware(request) {
