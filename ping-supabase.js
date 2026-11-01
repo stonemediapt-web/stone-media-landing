@@ -32,7 +32,7 @@ async function ping(projeto) {
       await ping(p);
     } catch (e) {
       console.error(`[${p.nome}] Erro: ${e.message}`);
-      hasError = true;
+      if (p.tabela) hasError = true; // sem tabela configurada, é apenas informativo
     }
   }
   if (hasError) process.exit(1);

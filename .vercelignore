@@ -1,0 +1,7 @@
+# Ficheiros internos: nao publicar no site
+ping-supabase.js
+gerar-pdf.js
+supabase/
+_template-cliente/
+precos.html
+StoneMedia_Apresentacao.pdf
