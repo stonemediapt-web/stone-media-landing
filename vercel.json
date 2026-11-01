@@ -1,11 +1,59 @@
 {
   "redirects": [
-    { "source": "/orcamento.html", "destination": "/gest/", "permanent": true },
-    { "source": "/orcamento", "destination": "/gest/", "permanent": true },
-    { "source": "/Gest", "destination": "/gest/", "permanent": false },
-    { "source": "/Gest/:path*", "destination": "/gest/:path*", "permanent": false }
+    {
+      "source": "/orcamento.html",
+      "destination": "/gest/",
+      "permanent": true
+    },
+    {
+      "source": "/orcamento",
+      "destination": "/gest/",
+      "permanent": true
+    },
+    {
+      "source": "/Gest",
+      "destination": "/gest/",
+      "permanent": false
+    },
+    {
+      "source": "/Gest/:path*",
+      "destination": "/gest/:path*",
+      "permanent": false
+    }
   ],
   "rewrites": [
-    { "source": "/gest/api/quotes", "destination": "/api/quotes" }
+    {
+      "source": "/gest/api/quotes",
+      "destination": "/api/quotes"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/vendor/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/Logotipo/logo-(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000"
+        }
+      ]
+    }
   ]
 }

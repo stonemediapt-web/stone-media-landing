@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Política de privacidade, cookies e formulários: os pontos a rever no site para tratar os dados dos visitantes com cuidado." />
   <title>RGPD no site: o essencial para uma pequena empresa | Blog Stone Media</title>
-  <link rel="icon" type="image/png" href="../Logotipo/StoneMedia_quadrado-Photoroom.png" />
+  <link rel="icon" type="image/png" href="../Logotipo/logo-180.png" />
   <link rel="canonical" href="https://stonemedia.pt/blog/rgpd-site-o-essencial.html" />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Stone Media" />
@@ -19,12 +19,9 @@
   <meta name="twitter:title" content="RGPD no site: o essencial para uma pequena empresa | Blog Stone Media" />
   <meta name="twitter:description" content="Política de privacidade, cookies e formulários: os pontos a rever no site para tratar os dados dos visitantes com cuidado." />
   <script src="/consent.js" defer></script>
-  <script src="/vendor/tailwind.js"></script>
-  <link href="/vendor/fonts/fonts.css" rel="stylesheet" />
-  <script src="/vendor/lucide.min.js"></script>
-  <script>
-    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] } } } }
-  </script>
+  <link rel="preload" href="/vendor/fonts/f1.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/vendor/fonts/f5.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/site.css?v=a94bcd376a" />
 </head>
 <body class="bg-white text-gray-900 font-sans antialiased">
 
@@ -33,7 +30,7 @@
   <header id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <a href="../index.html" class="flex items-center gap-2.5">
-        <img src="../Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" width="40" height="40" style="filter: brightness(0);" class="h-10 w-auto" />
+        <img src="../Logotipo/logo-80.png" alt="Stone Media" width="40" height="40" style="filter: brightness(0);" class="h-10 w-auto" />
         <span class="text-xl font-semibold tracking-tight text-gray-900">Stone<span class="text-gray-400 font-light">Media</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-8 text-sm text-gray-500">
@@ -79,7 +76,7 @@
     <div class="max-w-6xl mx-auto px-6">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
         <a href="../index.html" class="flex items-center gap-2.5">
-          <img src="../Logotipo/StoneMedia_quadrado-Photoroom.png" alt="Stone Media" width="36" height="36" style="filter: brightness(0);" class="h-9 w-auto" />
+          <img src="../Logotipo/logo-80.png" alt="Stone Media" width="36" height="36" style="filter: brightness(0);" class="h-9 w-auto" />
           <span class="text-lg font-semibold tracking-tight text-gray-900">Stone<span class="text-gray-400 font-light">Media</span></span>
         </a>
         <nav class="flex items-center gap-6 text-sm text-gray-500">
@@ -104,7 +101,6 @@
   </footer>
   <script>
     document.getElementById('copyright-year').textContent = new Date().getFullYear();
-    if (window.lucide) lucide.createIcons();
   </script>
 
 </body>

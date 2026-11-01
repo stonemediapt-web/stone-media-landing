@@ -5,3 +5,6 @@ supabase/
 _template-cliente/
 precos.html
 StoneMedia_Apresentacao.pdf
+assets-src/
+tailwind.config.js
+build-assets.js
