@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://stonemedia.pt/blog/index.html</loc>
-    <lastmod>2026-07-02</lastmod>
+    <lastmod>2026-11-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -87,6 +87,30 @@
   <url>
     <loc>https://stonemedia.pt/blog/checklist-fim-de-ano-site.html</loc>
     <lastmod>2026-07-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://stonemedia.pt/blog/perguntas-antes-contratar-site.html</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://stonemedia.pt/blog/estatisticas-site-o-que-ver.html</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://stonemedia.pt/blog/rgpd-site-o-essencial.html</loc>
+    <lastmod>2026-09-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://stonemedia.pt/blog/texto-pagina-inicial.html</loc>
+    <lastmod>2026-10-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
